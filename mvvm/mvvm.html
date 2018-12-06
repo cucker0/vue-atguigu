@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>mvvm test</title>
+	<script src="./js/compile.js"></script>
+	<script src="./js/mvvm.js"></script>
+	<script src="./js/observer.js"></script>
+	<script src="./js/watcher.js"></script>
+</head>
+<body>
+<div id="app">
+	<p>{{ name }}</p>
+	<p>{{name}}</p>
+	<p v-text="didi.name"></p>
+	<p>公司成立时间{{didi.age}}</p>
+	<button v-on:click="update">更新</button>
+</div>
+
+
+
+
+<script type=text/javascript>
+    new MVVM({
+        el: '#app',
+        data: {
+            name: 'lili',
+			didi: {'name': 'didi gong si', age: 4}
+        },
+		methods: {
+            update () {
+                this.name = 'gogo'
+				this.didi.age = 10
+			}
+		}
+    })
+</script>
+</body>
+</html>

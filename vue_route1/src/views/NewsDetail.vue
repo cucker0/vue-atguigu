@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul :newsDetail="newsDetail">
     <li>id:{{ news.id }}</li>
     <li>title:{{ news.title }}</li>
     <li>content:{{ news.content }}</li>
