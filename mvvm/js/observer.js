@@ -9,6 +9,7 @@ Observer.prototype = {
         Object.keys(data).forEach(function(key) {
             me.convert(key, data[key]);
         });
+        console.log(data )
     },
     convert: function(key, val) {
         this.defineReactive(this.data, key, val);

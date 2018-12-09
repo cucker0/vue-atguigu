@@ -47,6 +47,7 @@ Watcher.prototype = {
     },
     get: function() {
         Dep.target = this;
+        console.log(Dep)
         var value = this.getter.call(this.vm, this.vm);
         Dep.target = null;
         return value;

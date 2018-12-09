@@ -11,9 +11,10 @@
 <body>
 <div id="app">
 	<p>{{ name }}</p>
-	<p>{{name}}</p>
-	<p v-text="didi.name"></p>
-	<p>公司成立时间{{didi.age}}</p>
+	<p>{{ name }}</p>
+	<!--<p>{{name}}</p>-->
+	<!--<p v-text="didi.name"></p>-->
+	<!--<p>公司成立时间{{didi.age}}</p>-->
 	<button v-on:click="update">更新</button>
 </div>
 
@@ -21,7 +22,7 @@
 
 
 <script type=text/javascript>
-    new MVVM({
+    const vm = new MVVM({
         el: '#app',
         data: {
             name: 'lili',
@@ -34,6 +35,7 @@
 			}
 		}
     })
+	console.log(vm)
 </script>
 </body>
 </html>
