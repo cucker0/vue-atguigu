@@ -1,5 +1,5 @@
 /*
-*  所有基于state的getter 计算属性方法的对象
+*  所有基于state的多个计算属性get()方法的对象
 * */
 
 export default {
