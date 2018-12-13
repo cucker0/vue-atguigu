@@ -6,12 +6,12 @@
       </span>
       <span>外卖</span>
     </span>
-    <a href="javascript:;" class="guide_item" :class="{on: $route.path === '/search'}" v-on:click="goTo('/search')">
+    <RouterLink to="/search" class="guide_item" active-class="on">
       <span class="item_icon">
         <i class="iconfont icon-search"></i>
       </span>
       <span>搜索</span>
-    </a>
+    </RouterLink>
     <a href="javascript:;" class="guide_item" :class="{on: $route.path === '/order'}" @click="goTo('/order')">
       <span class="item_icon">
         <i class="iconfont icon-dingdan"></i>
@@ -43,7 +43,7 @@ export default {
   .footer_guide  //footer
     top-border-1px(#e4e4e4)
     position fixed
-    z-index 100
+    z-index 999
     left 0
     right 0
     bottom 0
@@ -59,13 +59,12 @@ export default {
       align-items center
       margin 5px
       color #999999
-      text-decoration none
       &.on
         color #02a774
       span
         font-size 12px
-        margin-top 1px
-        margin-bottom 1px
+        margin-top 2px
+        margin-bottom 2px
         .iconfont
           font-size 22px
 </style>
