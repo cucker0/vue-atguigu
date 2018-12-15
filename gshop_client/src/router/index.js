@@ -8,6 +8,7 @@ import MSite from '../pages/MSite/MSite'
 import Seaarch from '../pages/Seaarch/Seaarch'
 import Order from '../pages/Order/Order'
 import Profile from '../pages/Profile/Profile'
+import Login from '../components/Login/Login'
 
 // 声明使用vue-router插件
 Vue.use(Router)
@@ -16,23 +17,42 @@ export default new Router({
   routes: [
     {
       path: '/msite',
-      component: MSite
+      name: 'MSite', // 命名路由，可以在组件中RouterLink :to={name: MSite}使用
+      component: MSite,
+      meta: { // 默认为空
+        showFooter: true
+      }
     },
     {
       path: '/search',
-      component: Seaarch
+      name: 'Seaarch',
+      component: Seaarch,
+      meta: {
+        showFooter: true
+      }
     },
     {
       path: '/order',
-      component: Order
+      name: 'Order',
+      component: Order,
+      meta: {
+        showFooter: true
+      }
     },
     {
       path: '/profile',
-      component: Profile
+      component: Profile,
+      meta: {
+        showFooter: true
+      }
     },
     {
       path: '/',
       redirect: '/msite'
+    },
+    {
+      path: '/login',
+      component: Login
     }
   ]
 })

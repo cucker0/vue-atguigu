@@ -6,18 +6,18 @@
       </span>
       <span>外卖</span>
     </span>
-    <RouterLink to="/search" class="guide_item" active-class="on">
+    <router-link :to="{name: 'Seaarch'}" class="guide_item" active-class="on">
       <span class="item_icon">
         <i class="iconfont icon-search"></i>
       </span>
       <span>搜索</span>
-    </RouterLink>
-    <a href="javascript:;" class="guide_item" :class="{on: $route.path === '/order'}" @click="goTo('/order')">
+    </router-link>
+    <router-link to="/order" tag="span" class="guide_item" :class="{on: $route.path === '/order'}">
       <span class="item_icon">
         <i class="iconfont icon-dingdan"></i>
       </span>
       <span>订单</span>
-    </a>
+    </router-link>
     <a href="javascript:;" class="guide_item" :class="{on: $route.path === '/profile'}" @click="goTo('/profile')">
       <span class="item_icon">
         <i class="iconfont icon-geren"></i>
