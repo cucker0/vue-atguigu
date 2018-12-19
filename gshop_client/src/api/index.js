@@ -4,12 +4,13 @@
 * */
 
 import ajax from './ajax'
+const BASIC_URL = '/api'
 
 // 根据经纬度获取位置详情
 export const reqAddress = (geohash) => ajax(`/position/${geohash}`)
 
 // 获取食品分类列表
-export const reqFoodTypes = () => ajax('/index_category')
+export const reqFoodTypes = () => ajax(BASIC_URL + '/index_category')
 
 // 根据经纬度获取商铺列表
 export const reqShops = (longitude, latitude) => ajax('/shops', {longitude, latitude}, 'GET')
@@ -27,10 +28,10 @@ export const reqLogin = (name, pwd, captcha) => ajax('/login_pwd', {name, pwd, c
 export const reqSendcode = (phone) => ajax('/sendcode', {phone})
 
 // 手机号验证码登陆
-export const reqLogin_sms = (phone, code) => ajax('/login_sms', {phone, code}, 'POST')
+export const reqLoginSms = (phone, code) => ajax('/login_sms', {phone, code}, 'POST')
 
 // 根据会话获取用户信息
-export const reqUserinfo = (user_id) => ajax('/userinfo', {user_id})
+export const reqUserinfo = (userId) => ajax('/userinfo', {userId})
 
 // 用户登出
-export const reqLogout = (user_id) => ajax('/logout', {user_id})
+export const reqLogout = () => ajax('/logout')
