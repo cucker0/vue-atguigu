@@ -16,6 +16,7 @@ export default {
   mounted () {
     // this.$store.dispatch('getAddress') // 使用macActionsv跟这种都可以
     this.getAddress()
+    // this.$store.dispatch('getShops')
   },
   methods: {
     ...mapActions(['getAddress'])
