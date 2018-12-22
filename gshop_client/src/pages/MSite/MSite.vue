@@ -85,15 +85,33 @@ export default {
   mounted () {
     // 获取食品分类列表
     this.$store.dispatch('getFootCategorys')
-    // 创建Swiper实例
-    /* eslint-disable no-new */
-    new Swiper('.swiper-container', {
-      loop: true, // 循环模式选项
-      // 如果需要分页器
-      pagination: {
-        el: '.swiper-pagination'
-      }
-    })
+  },
+  watch: {
+    foodCategorys (newValue) { // 值有变动时创建Swiper实例
+      // setTimeout(() => { // 等等待一个指定时间，可以解析Swiper轮播图未加载异常的问题，但不够好。
+      //   // 创建Swiper实例
+      //   /* eslint-disable no-new */
+      //   new Swiper('.swiper-container', {
+      //     loop: true, // 循环模式选项
+      //     // 如果需要分页器
+      //     pagination: {
+      //       el: '.swiper-pagination'
+      //     }
+      //   })
+      // }, 100)
+      // 一旦完成界面更新时立即调用,创建Swiper实例
+      this.$nextTick(() => { // https://cn.vuejs.org/v2/api/#vm-nextTick
+        // 创建Swiper实例
+        /* eslint-disable no-new */
+        new Swiper('.swiper-container', {
+          loop: true, // 循环模式选项
+          // 如果需要分页器
+          pagination: {
+            el: '.swiper-pagination'
+          }
+        })
+      })
+    }
   }
 }
 </script>

@@ -4,7 +4,7 @@
 
 import {
   RECIVE_ADDRESS,
-  RECIVE_FOODCATEGORY,
+  RECIVE_FOODCATEGORYS,
   RECIVE_SHOPS
 } from './mutation-types'
 
@@ -12,7 +12,7 @@ export default {
   [RECIVE_ADDRESS] (state, {address}) {
     state.address = address
   },
-  [RECIVE_FOODCATEGORY] (state, {foodCategorys}) {
+  [RECIVE_FOODCATEGORYS] (state, {foodCategorys}) {
     state.foodCategorys = foodCategorys
   },
   [RECIVE_SHOPS] (state, {shops}) {

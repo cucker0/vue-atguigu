@@ -4,7 +4,7 @@
 
 import {
   RECIVE_ADDRESS,
-  RECIVE_FOODCATEGORY,
+  RECIVE_FOODCATEGORYS,
   RECIVE_SHOPS
 } from './mutation-types'
 import {reqAddress, reqFoodCategorys, reqShops} from '../api'
@@ -40,7 +40,7 @@ export default {
     // 提交一个mutation
     if (result.code === 0) {
       const foodCategorys = result.data
-      commit(RECIVE_FOODCATEGORY, {foodCategorys})
+      commit(RECIVE_FOODCATEGORYS, {foodCategorys})
     }
   },
 
