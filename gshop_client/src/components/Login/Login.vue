@@ -11,11 +11,11 @@
       <form>
         <div :class="{on: loginWay}">
           <section class="login_message">
-            <input type="tel" maxlength="11" placeholder="手机号">
-            <button disabled="disabled" class="get_verification">获取验证码</button>
+            <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
+            <button disabled="disabled" class="get_verification" :class="{phone_true: checkPhone}">获取验证码</button>
           </section>
           <section class="login_verification">
-            <input type="tel" maxlength="8" placeholder="验证码">
+            <input type="tel" maxlength="8" placeholder="验证码" v-model="verification">
           </section>
           <section class="login_hint">
             温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -55,7 +55,18 @@ export default {
   name: 'Login',
   data () {
     return {
-      loginWay: true // true: 短信登录， false: 帐号密码登录
+      loginWay: true, // true: 短信登录， false: 帐号密码登录
+      phone: '', // 手机号码
+      verification: '' // 短信验证码 或帐号密码
+    }
+  },
+  computed: {
+    checkPhone () {
+      /*
+      * 检查手机号码是否合法
+      * return: 检查的结果 true/false
+      * */
+      return /^(((13[0-9]{1})|(14[0-9]{1})|(17[0-9]{1})|(15[0-3]{1})|(15[4-9]{1})|(18[0-9]{1})|(19[8-9]){1}|(166))+\d{8})$/.test(this.phone)
     }
   }
 }
@@ -118,6 +129,8 @@ export default {
               color #ccc
               font-size 14px
               background transparent
+              &.phone_true
+                color black
           .login_verification
             position relative
             margin-top 16px
