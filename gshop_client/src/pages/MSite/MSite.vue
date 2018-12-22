@@ -12,7 +12,7 @@
     <!--首页导航-->
     <nav class="msite_nav">
       <div class="swiper-container">
-        <div class="swiper-wrapper">
+        <div class="swiper-wrapper" v-if="foodCategorys.length > 0">
           <div class="swiper-slide" v-for="(foodCategorys, index) in foodCategorysArr" :key="index">
             <a href="javascript:" class="link_to_food" v-for="(foodCategory, index) in foodCategorys" :key="index">
               <div class="food_container">
@@ -21,6 +21,9 @@
               <span>{{foodCategory.title}}</span>
             </a>
           </div>
+        </div>
+        <div class="swiper-container" v-else>
+          <img src="./images/msite_back.svg" alt="back"/>
         </div>
         <!-- Add Pagination 分页器-->
         <div class="swiper-pagination"></div>

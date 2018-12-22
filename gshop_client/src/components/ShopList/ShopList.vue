@@ -1,6 +1,6 @@
 <template>
   <div class="shop_container">
-    <ul class="shop_list">
+    <ul class="shop_list" v-if="shops.length">
       <li class="shop_li border-1px" v-for="(shop, index) in shops" :key="index">
         <a>
           <div class="shop_left">
@@ -42,6 +42,12 @@
             </section>
           </div>
         </a>
+      </li>
+    </ul>
+    <ul class="shop_list" v-else>
+      <!-- 如果商家列表数据还没加载到，先展示一个背景图片 -->
+      <li v-for="item in 6" :key="item">
+        <img src="./images/shop_back.svg" alt="back"/>
       </li>
     </ul>
   </div>
