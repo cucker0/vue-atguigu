@@ -7,10 +7,10 @@ import ajax from './ajax'
 const BASIC_URL = '/api'
 
 // 根据经纬度获取位置详情
-export const reqAddress = (geohash) => ajax(`/position/${geohash}`)
+export const reqAddress = (geohash) => ajax(`${BASIC_URL}/position/${geohash}`)
 
 // 获取食品分类列表
-export const reqFoodTypes = () => ajax(BASIC_URL + '/index_category')
+export const reqFoodCategorys = () => ajax(BASIC_URL + '/index_category')
 
 // 根据经纬度获取商铺列表
 export const reqShops = (longitude, latitude) => ajax('/shops', {longitude, latitude}, 'GET')
