@@ -12,7 +12,10 @@
         <div :class="{on: loginWay}">
           <section class="login_message">
             <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
-            <button disabled="disabled" class="get_verification" :class="{phone_true: checkPhone}">获取验证码</button>
+            <button :disabled="!checkPhone" class="get_verification" :class="{phone_true: checkPhone}" @click.prevent="getMessageCode">
+              <!-- 计数器大于0时显示已发送及倒计时 -->
+              {{counter > 0 ? `已发送(${counter})` : '获取验证码'}}
+            </button>
           </section>
           <section class="login_verification">
             <input type="tel" maxlength="8" placeholder="验证码" v-model="verification">
@@ -28,10 +31,11 @@
               <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="密码">
-              <div class="switch_button off">
-                <div class="switch_circle"></div>
-                <span class="switch_text">...</span>
+              <input type="text" maxlength="8" placeholder="密码" v-if="showPwd" v-model="pwd">
+              <input type="password" maxlength="8" placeholder="密码" v-else v-model="pwd">
+              <div class="switch_button" :class="showPwd ? 'on': 'off'" @click="showPwd = !showPwd">
+                <div class="switch_circle" :class="{right: showPwd}"></div>
+                <span class="switch_text">{{showPwd ? 'abc' : '...'}}</span>
               </div>
             </section>
             <section class="login_message">
@@ -51,13 +55,17 @@
 </template>
 
 <script>
+import {reqSendcode} from '../../api'
 export default {
   name: 'Login',
   data () {
     return {
       loginWay: true, // true: 短信登录， false: 帐号密码登录
       phone: '', // 手机号码
-      verification: '' // 短信验证码 或帐号密码
+      verification: '', // 短信验证码 或帐号密码
+      counter: 0, // 发送短信验证码计时器
+      pwd: '', // 用户登录的密码
+      showPwd: false // 是否显示密码
     }
   },
   computed: {
@@ -67,6 +75,28 @@ export default {
       * return: 检查的结果 true/false
       * */
       return /^(((13[0-9]{1})|(14[0-9]{1})|(17[0-9]{1})|(15[0-3]{1})|(15[4-9]{1})|(18[0-9]{1})|(19[8-9]){1}|(166))+\d{8})$/.test(this.phone)
+    }
+  },
+  methods: {
+    getMessageCode () {
+      /*
+      * 获取短信验证码
+      *
+      * */
+
+      // 可点击情况：只有在未开始计时
+      if (this.counter === 0) {
+        // 开始倒计时
+        this.counter = 30
+        const intervalId = setInterval(() => { // 定时器，间隔时间为1s
+          this.counter--
+          if (this.counter <= 0) {
+            clearInterval(intervalId) // 计数器<= 0时清除定时器
+          }
+        }, 1000)
+        // 向api发送ajax请求
+        reqSendcode(this.phone)
+      }
     }
   }
 }
@@ -170,6 +200,8 @@ export default {
                 background #fff
                 box-shadow 0 2px 4px 0 rgba(0,0,0,.1)
                 transition transform .3s
+                &.right
+                  transform translateX(28px)
           .login_hint
             margin-top 12px
             color #999
