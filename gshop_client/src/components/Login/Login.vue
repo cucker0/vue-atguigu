@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="login_content">
-      <form>
+      <form @submit.prevent="login">
         <div :class="{on: loginWay}">
           <section class="login_message">
             <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
@@ -18,7 +18,7 @@
             </button>
           </section>
           <section class="login_verification">
-            <input type="tel" maxlength="8" placeholder="验证码" v-model="verification">
+            <input type="tel" maxlength="8" placeholder="验证码" v-model="code">
           </section>
           <section class="login_hint">
             温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -28,18 +28,20 @@
         <div :class="{on: !loginWay}">
           <section>
             <section class="login_message">
-              <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+              <input type="text" maxlength="11" placeholder="手机/邮箱/用户名" v-model="name">
             </section>
             <section class="login_verification">
-              <input type="text" maxlength="8" placeholder="密码" v-if="showPwd" v-model="pwd">
-              <input type="password" maxlength="8" placeholder="密码" v-else v-model="pwd">
+              <!--<input type="text" maxlength="8" placeholder="密码" v-if="showPwd" v-model="pwd">-->
+              <!--<input type="password" maxlength="8" placeholder="密码" v-else v-model="pwd">-->
+              <!--也可以下面这种方式来切换密码的显示方式-->
+              <input :type="showPwd ? 'text' : 'password'" maxlength="8" placeholder="密码" v-model="pwd">
               <div class="switch_button" :class="showPwd ? 'on': 'off'" @click="showPwd = !showPwd">
                 <div class="switch_circle" :class="{right: showPwd}"></div>
                 <span class="switch_text">{{showPwd ? 'abc' : '...'}}</span>
               </div>
             </section>
             <section class="login_message">
-              <input type="text" maxlength="11" placeholder="验证码">
+              <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
               <img class="get_verification" src="./images/captcha.svg" alt="captcha">
             </section>
           </section>
@@ -51,22 +53,31 @@
     <a href="javascript:" class="go_back" v-on:click="$router.back()">
       <i class="iconfont icon-jiantou2"></i>
     </a>
+    <AlertTip :alertText="alertText" v-show="alertShow" @closeTip="CloseTip"></AlertTip>
   </div>
 </template>
 
 <script>
 import {reqSendcode} from '../../api'
+import AlertTip from '../../components/AlertTip/AlertTip'
 export default {
   name: 'Login',
   data () {
     return {
       loginWay: true, // true: 短信登录， false: 帐号密码登录
-      phone: '', // 手机号码
-      verification: '', // 短信验证码 或帐号密码
       counter: 0, // 发送短信验证码计时器
+      phone: '', // 手机号码
+      code: '', // 短信验证码
       pwd: '', // 用户登录的密码
-      showPwd: false // 是否显示密码
+      name: '', // 用户名
+      captcha: '', // 图形验证码
+      showPwd: false, // 是否显示密码,
+      alertText: '', // 提示文本
+      alertShow: false // 是否显示提示框
     }
+  },
+  components: {
+    AlertTip
   },
   computed: {
     checkPhone () {
@@ -97,6 +108,43 @@ export default {
         // 向api发送ajax请求
         reqSendcode(this.phone)
       }
+    },
+    showAlert (alertText) { // 显示提示信息，替换提示文本
+      this.alertShow = true
+      this.alertText = alertText
+    },
+    login () {
+      // 异步登录，前台数据检测
+      if (this.loginWay) { // 短信登录
+        const {checkPhone, phone, code} = this
+        if (!phone) {
+          // 手机号不能为空
+          this.showAlert('手机号不能为空')
+        } else if (!checkPhone) {
+          // 手机号不正确
+          this.showAlert('手机号不正确')
+        } else if (!/^\d{6}$/.test(code)) {
+          // 短信验证码必须是6位数字
+          this.showAlert('短信验证码必须是6位数字')
+        }
+      } else { // 帐号密码登录
+        const {name, pwd, captcha} = this
+        if (!name) {
+          // 用户名不能为空
+          this.showAlert('用户名不能为空')
+        } else if (!pwd) {
+          // 密码不能为空
+          this.showAlert('密码不能为空')
+        } else if (!captcha) {
+          // 验证码不能为空
+          this.showAlert('验证码不能为空')
+        }
+      }
+    },
+    CloseTip () {
+      // 关闭提示
+      this.alertShow = false
+      this.alertText = ''
     }
   }
 }
