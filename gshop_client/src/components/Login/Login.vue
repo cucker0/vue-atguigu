@@ -42,7 +42,7 @@
             </section>
             <section class="login_message">
               <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-              <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+              <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha">
             </section>
           </section>
         </div>
@@ -145,6 +145,11 @@ export default {
       // 关闭提示
       this.alertShow = false
       this.alertText = ''
+    },
+    getCaptcha (event) {
+      // 获取图形验证码
+      event.target.src = 'http://localhost:4000/captcha?time=' + Date.now()
+      // console.log(event.target.src)
     }
   }
 }
