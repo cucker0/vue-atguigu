@@ -12,7 +12,7 @@
         <div :class="{on: loginWay}">
           <section class="login_message">
             <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
-            <button :disabled="!checkPhone" class="get_verification" :class="{phone_true: checkPhone}" @click.prevent="getMessageCode">
+            <button :disabled="!checkPhone" class="get_verification" :class="{phone_true: checkPhone}" @click.prevent="getSmsCode">
               <!-- 计数器大于0时显示已发送及倒计时 -->
               {{counter > 0 ? `已发送(${counter})` : '获取验证码'}}
             </button>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import {reqSendcode} from '../../api'
+import {reqSendCode} from '../../api'
 import AlertTip from '../../components/AlertTip/AlertTip'
 export default {
   name: 'Login',
@@ -89,7 +89,7 @@ export default {
     }
   },
   methods: {
-    getMessageCode () {
+    async getSmsCode () {
       /*
       * 获取短信验证码
       *
@@ -99,14 +99,23 @@ export default {
       if (this.counter === 0) {
         // 开始倒计时
         this.counter = 30
-        const intervalId = setInterval(() => { // 定时器，间隔时间为1s
+        var intervalId = setInterval(() => { // 定时器，间隔时间为1s
           this.counter--
           if (this.counter <= 0) {
             clearInterval(intervalId) // 计数器<= 0时清除定时器
           }
         }, 1000)
-        // 向api发送ajax请求
-        reqSendcode(this.phone)
+        // 向api发送ajax请求,向指定的手机号发短信验证码
+        const result = await reqSendCode(this.phone) // 没有 async .. await时，返回的是一个Promise对象
+        if (result.code === 1) { // 短信发送失败
+          // 弹出提示
+          this.showAlert(result.msg)
+          // 停止倒计时
+          this.counter = 0
+          // console.log(intervalId) // intervalId是一个数字
+          clearInterval(intervalId)
+        } else { // 短信发送成功
+        }
       }
     },
     showAlert (alertText) { // 显示提示信息，替换提示文本
