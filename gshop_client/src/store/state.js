@@ -9,5 +9,4 @@ export default {
   foodCategorys: [], // 食物分类列表
   shops: [], // 商家列表
   userinfo: {} // 用户信息
-
 }

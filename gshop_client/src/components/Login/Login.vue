@@ -198,6 +198,7 @@ export default {
         // 把user信息保存到store的state中
         const user = login_result.data
         // 跳转到个人中心
+        this.$store.dispatch('saveUserinfo', user)
         this.$router.replace('/profile')
       } else { // 登录失败
         // 弹出提示框

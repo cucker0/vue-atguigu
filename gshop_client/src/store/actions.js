@@ -5,7 +5,8 @@
 import {
   RECIVE_ADDRESS,
   RECIVE_FOODCATEGORYS,
-  RECIVE_SHOPS
+  RECIVE_SHOPS,
+  RECIVE_USERINFO
 } from './mutation-types'
 import {reqAddress, reqFoodCategorys, reqShops} from '../api'
 
@@ -55,6 +56,11 @@ export default {
       const shops = result.data
       commit(RECIVE_SHOPS, {shops})
     }
+  },
+
+  // 同步保存用户信息
+  saveUserinfo ({commit}, userinfo) {
+    commit(RECIVE_USERINFO, {userinfo})
   }
 
 }
