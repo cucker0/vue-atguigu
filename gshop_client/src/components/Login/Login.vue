@@ -7,7 +7,7 @@
         <a href="javascript:;" :class="{on: !loginWay}" @click="loginWay = false">密码登录</a>
       </div>
     </div>
-    <div class="login_content">
+    <div class="login_content" @keyup.enter="login">
       <form @submit.prevent="login">
         <div :class="{on: loginWay}">
           <section class="login_message">
@@ -42,7 +42,7 @@
             </section>
             <section class="login_message">
               <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-              <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha">
+              <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha" ref="captcha">
             </section>
           </section>
         </div>
@@ -58,8 +58,9 @@
 </template>
 
 <script>
-import {reqSendCode} from '../../api'
+import {reqSendCode, reqSmsLogin, reqPasswordLogin} from '../../api'
 import AlertTip from '../../components/AlertTip/AlertTip'
+/* eslint-disable */
 export default {
   name: 'Login',
   data () {
@@ -89,6 +90,9 @@ export default {
     }
   },
   methods: {
+    echoTest () {
+      console.log('999')
+    },
     async getSmsCode () {
       /*
       * 获取短信验证码
@@ -99,10 +103,10 @@ export default {
       if (this.counter === 0) {
         // 开始倒计时
         this.counter = 30
-        var intervalId = setInterval(() => { // 定时器，间隔时间为1s
+        this.intervalId = setInterval(() => { // 定时器，间隔时间为1s
           this.counter--
           if (this.counter <= 0) {
-            clearInterval(intervalId) // 计数器<= 0时清除定时器
+            clearInterval(this.intervalId) // 计数器<= 0时清除定时器
           }
         }, 1000)
         // 向api发送ajax请求,向指定的手机号发短信验证码
@@ -110,10 +114,15 @@ export default {
         if (result.code === 1) { // 短信发送失败
           // 弹出提示
           this.showAlert(result.msg)
+
           // 停止倒计时
-          this.counter = 0
-          // console.log(intervalId) // intervalId是一个数字
-          clearInterval(intervalId)
+          if (this.counter) {
+            this.counter = 0
+            // console.log(intervalId) // intervalId是一个数字
+            clearInterval(this.intervalId)
+            this.intervalId = undefined
+          }
+
         } else { // 短信发送成功
         }
       }
@@ -122,32 +131,79 @@ export default {
       this.alertShow = true
       this.alertText = alertText
     },
-    login () {
+    async login () {
       // 异步登录，前台数据检测
+      let login_result // 请求登录接口返回的数据（包括短信登录、密码登录）
       if (this.loginWay) { // 短信登录
         const {checkPhone, phone, code} = this
         if (!phone) {
           // 手机号不能为空
           this.showAlert('手机号不能为空')
+          return // 跳出，不继续往下执行
         } else if (!checkPhone) {
           // 手机号不正确
           this.showAlert('手机号不正确')
+          return
         } else if (!/^\d{6}$/.test(code)) {
           // 短信验证码必须是6位数字
           this.showAlert('短信验证码必须是6位数字')
+          return
         }
+        // 发送ajax短信登录请求
+        login_result = await reqSmsLogin(phone, code)
+        // if (login_result.code === 0) { // 登录成功
+        //   // 把user信息保存到store
+        //   const user = login_result.data
+        // } else { // 登录失败
+        //   // 弹出提示框
+        //   const msg = login_result.msg
+        //   this.showAlert(msg)
+        // }
       } else { // 帐号密码登录
         const {name, pwd, captcha} = this
         if (!name) {
           // 用户名不能为空
           this.showAlert('用户名不能为空')
+          return
         } else if (!pwd) {
           // 密码不能为空
           this.showAlert('密码不能为空')
+          return
         } else if (!captcha) {
           // 验证码不能为空
           this.showAlert('验证码不能为空')
+          return
         }
+        // 发送ajax密码登录请求
+        login_result = await reqPasswordLogin({name, pwd, captcha})
+        // if (login_result.code === 0) { // 登录成功
+        //   // 把user信息保存到store
+        //   const user = login_result.data
+        // } else { // 登录失败
+        //   // 弹出提示框
+        //   const msg = login_result.msg
+        //   this.showAlert(msg)
+        // }
+      }
+
+      // 停止倒计时
+      if (this.counter) {
+        this.counter = 0
+        clearInterval(this.intervalId)
+        this.intervalId = undefined
+      }
+
+      // 处理请求登录接口(短信登录、密码登录)返回的数据
+      if (login_result.code === 0) { // 登录成功
+        // 把user信息保存到store的state中
+        const user = login_result.data
+        // 跳转到个人中心
+        this.$router.replace('/profile')
+      } else { // 登录失败
+        // 弹出提示框
+        this.getCaptcha()
+        const msg = login_result.msg
+        this.showAlert(msg)
       }
     },
     CloseTip () {
@@ -155,9 +211,15 @@ export default {
       this.alertShow = false
       this.alertText = ''
     },
-    getCaptcha (event) {
-      // 获取图形验证码
-      event.target.src = 'http://localhost:4000/captcha?time=' + Date.now()
+    // getCaptcha (event) {
+    //   // 获取图形验证码  (在密码登录失败时，需要刷新一次图形验证码，这时候无法用event，故这里用ref来定位到图形验证码标签)
+    //   event.target.src = 'http://localhost:4000/captcha?time=' + Date.now()
+    //   // console.log(event.target.src)
+    // },
+    getCaptcha () {
+      // 获取图形验证码  (在密码登录失败时，需要刷新一次图形验证码，这时候无法用event，故这里用ref来定位到图形验证码标签)
+      // 每次的src要不一样
+      this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
       // console.log(event.target.src)
     }
   }
