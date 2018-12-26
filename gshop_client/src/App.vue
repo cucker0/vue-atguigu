@@ -17,9 +17,10 @@ export default {
     // this.$store.dispatch('getAddress') // 使用macActionsv跟这种都可以
     this.getAddress()
     // this.$store.dispatch('getShops')
+    this.getUserinfo() // 根据cookie信息获取用户信息
   },
   methods: {
-    ...mapActions(['getAddress'])
+    ...mapActions(['getAddress', 'getUserinfo'])
   }
 }
 </script>

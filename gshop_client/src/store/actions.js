@@ -8,7 +8,7 @@ import {
   RECIVE_SHOPS,
   RECIVE_USERINFO
 } from './mutation-types'
-import {reqAddress, reqFoodCategorys, reqShops} from '../api'
+import {reqAddress, reqFoodCategorys, reqShops, reqUserInfo} from '../api'
 
 export default {
   // 异步获取地址
@@ -61,6 +61,14 @@ export default {
   // 同步保存用户信息
   saveUserinfo ({commit}, userinfo) {
     commit(RECIVE_USERINFO, {userinfo})
-  }
+  },
 
+  // 异步获取用户信息
+  async getUserinfo ({commit}) {
+    const result = await reqUserInfo()
+    if (result.code === 0) { // 获取用相应的用户信息
+      const userinfo = result.data
+      commit(RECIVE_USERINFO, {userinfo})
+    }
+  }
 }

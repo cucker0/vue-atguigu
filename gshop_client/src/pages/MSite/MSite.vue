@@ -1,12 +1,16 @@
 <template>
   <div class="msite">
     <HeaderTop :title="address.name">
-      <span class="header_search" slot="left">
+      <router-link class="header_search" slot="left" to="'/search">
         <i class="iconfont icon-sousuo"></i>
-      </span>
+      </router-link>
 
       <span class="header_login" slot="right">
-        <span class="header_login_text">登录|注册</span>
+        <router-link class="header_login_text" to="/login" v-if="!userinfo._id">登录|注册</router-link>
+        <span class="header_login_text" v-else>
+          <i class="iconfont icon-person"></i>
+        </span>
+
       </span>
     </HeaderTop>
     <!--首页导航-->
@@ -61,7 +65,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['address', 'foodCategorys']), // state中的address
+    ...mapState(['address', 'foodCategorys', 'userinfo']), // state中的address等
     foodCategorysArr () {
       /*
       根据 foodCategorys(一维数组)生成一个符合条件的二维数组（小数组里最多8个元素）,以符合轮播图的排版要求
