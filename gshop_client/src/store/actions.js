@@ -7,7 +7,7 @@ import {
   RECIVE_FOODCATEGORYS,
   RECIVE_SHOPS,
   RECIVE_USERINFO,
-  LOGOUT
+  RESET_USERINFO
 } from './mutation-types'
 import {reqAddress, reqFoodCategorys, reqShops, reqUserInfo, reqLogout} from '../api'
 
@@ -77,7 +77,7 @@ export default {
   async logout ({commit}) {
     const result = await reqLogout()
     if (result.code === 0) { // 退出登录成功
-      commit(LOGOUT)
+      commit(RESET_USERINFO)
     }
   }
 }

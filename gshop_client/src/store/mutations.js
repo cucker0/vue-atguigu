@@ -7,7 +7,7 @@ import {
   RECIVE_FOODCATEGORYS,
   RECIVE_SHOPS,
   RECIVE_USERINFO,
-  LOGOUT
+  RESET_USERINFO
 } from './mutation-types'
 
 export default {
@@ -23,7 +23,7 @@ export default {
   [RECIVE_USERINFO] (state, {userinfo}) {
     state.userinfo = userinfo
   },
-  [LOGOUT] (state) {
+  [RESET_USERINFO] (state) {
     // 退出登录，重置用户信息为初始值
     state.userinfo = {}
   }

@@ -119,6 +119,7 @@ export default {
             position: 'bottom',
             duration: 2000
           })
+          this.$router.replace('/msite')
         },
         action => { // 取消
           console.log('点击了 取消')

@@ -11,7 +11,7 @@
 <script>
 import HeaderTop from '../../components/HeaderTop/HeaderTop'
 export default {
-  name: 'Seaarch',
+  name: 'Search',
   components: {
     HeaderTop
   }

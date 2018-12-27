@@ -6,7 +6,7 @@
       </span>
       <span>外卖</span>
     </span>
-    <router-link :to="{name: 'Seaarch'}" class="guide_item" active-class="on">
+    <router-link :to="{name: 'Search'}" class="guide_item" active-class="on">
       <span class="item_icon">
         <i class="iconfont icon-search"></i>
       </span>

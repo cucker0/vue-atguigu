@@ -4,7 +4,7 @@
       <h2 class="login_logo">硅谷外卖</h2>
       <div class="login_header_title">
         <a href="javascript:;" :class="{on: loginWay}" v-on:click="loginWay = true">短信登录</a>
-        <a href="javascript:;" :class="{on: !loginWay}" @click="loginWay = false">密码登录</a>
+        <a href="javascript:;" :class="{on: !loginWay}" @click="loginWay = false" @click.prevent="getCaptcha">密码登录</a>
       </div>
     </div>
     <div class="login_content" @keyup.enter="login">
@@ -193,7 +193,6 @@ export default {
         clearInterval(this.intervalId)
         this.intervalId = undefined
       }
-
       // 处理请求登录接口(短信登录、密码登录)返回的数据
       if (login_result.code === 0) { // 登录成功
         // 把user信息保存到store的state中
@@ -203,8 +202,8 @@ export default {
         this.$router.replace('/profile')
       } else { // 登录失败
         // 弹出提示框
-        this.getCaptcha()
         const msg = login_result.msg
+        this.getCaptcha() // 重新获取一次图形验证码
         this.showAlert(msg)
         this.captcha = '' // 清空已填写的图形验证码
         this.code = '' // 清空已填写的短信验证码
