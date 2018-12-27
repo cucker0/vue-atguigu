@@ -147,6 +147,7 @@ export default {
         } else if (!/^\d{6}$/.test(code)) {
           // 短信验证码必须是6位数字
           this.showAlert('短信验证码必须是6位数字')
+          this.code = '' // 清空已填写的短信验证码
           return
         }
         // 发送ajax短信登录请求
@@ -205,6 +206,8 @@ export default {
         this.getCaptcha()
         const msg = login_result.msg
         this.showAlert(msg)
+        this.captcha = '' // 清空已填写的图形验证码
+        this.code = '' // 清空已填写的短信验证码
       }
     },
     CloseTip () {

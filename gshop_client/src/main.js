@@ -6,6 +6,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
+import { Button } from 'mint-ui'
+
+Vue.component(Button.name, Button) // 注册全局的 <mt-button> 组件标签
 
 /* eslint-disable no-new */
 new Vue({

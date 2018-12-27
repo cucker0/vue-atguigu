@@ -6,9 +6,10 @@ import {
   RECIVE_ADDRESS,
   RECIVE_FOODCATEGORYS,
   RECIVE_SHOPS,
-  RECIVE_USERINFO
+  RECIVE_USERINFO,
+  LOGOUT
 } from './mutation-types'
-import {reqAddress, reqFoodCategorys, reqShops, reqUserInfo} from '../api'
+import {reqAddress, reqFoodCategorys, reqShops, reqUserInfo, reqLogout} from '../api'
 
 export default {
   // 异步获取地址
@@ -69,6 +70,14 @@ export default {
     if (result.code === 0) { // 获取用相应的用户信息
       const userinfo = result.data
       commit(RECIVE_USERINFO, {userinfo})
+    }
+  },
+
+  // 异步退出登录
+  async logout ({commit}) {
+    const result = await reqLogout()
+    if (result.code === 0) { // 退出登录成功
+      commit(LOGOUT)
     }
   }
 }

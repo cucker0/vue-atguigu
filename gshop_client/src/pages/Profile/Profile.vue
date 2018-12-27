@@ -7,7 +7,7 @@
           <i class="iconfont icon-person"></i>
         </div>
         <div class="user-info">
-          <p class="user-info-top" v-if="!userinfo.phone">{{userinfo.name || 登录/注册}}</p>
+          <p class="user-info-top" v-if="!userinfo.phone">{{userinfo.name || '登录/注册'}}</p>
           <p>
                 <span class="user-icon">
                   <i class="iconfont icon-shouji icon-mobile"></i>
@@ -89,12 +89,17 @@
         </div>
       </a>
     </section>
+    <section class="profile_my_order border-1px">
+      <mt-button type="danger" class="logout" @click="Logout" v-if="userinfo._id">退出登录</mt-button>
+    </section>
   </section>
 </template>
 
 <script>
 import HeaderTop from '../../components/HeaderTop/HeaderTop'
 import {mapState} from 'vuex'
+import { MessageBox, Toast } from 'mint-ui'
+
 export default {
   name: 'Profile',
   components: {
@@ -102,6 +107,24 @@ export default {
   },
   computed: {
     ...mapState(['userinfo'])
+  },
+  methods: {
+    Logout () {
+      MessageBox.confirm('确定退出吗?').then(
+        action => { // 确定
+          // 请求登出
+          this.$store.dispatch('logout')
+          Toast({ // 提示信息
+            message: '退出登录成功',
+            position: 'bottom',
+            duration: 2000
+          })
+        },
+        action => { // 取消
+          console.log('点击了 取消')
+        }
+      )
+    }
   }
 }
 </script>
@@ -239,6 +262,8 @@ export default {
             span
               color #6ac20b
     .profile_my_order
+      .logout
+          width 100%
       top-border-1px(#e4e4e4)
       margin-top 10px
       background #fff
