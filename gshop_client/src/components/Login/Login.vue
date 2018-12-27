@@ -223,7 +223,9 @@ export default {
     getCaptcha () {
       // 获取图形验证码  (在密码登录失败时，需要刷新一次图形验证码，这时候无法用event，故这里用ref来定位到图形验证码标签)
       // 每次的src要不一样
-      this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
+      const d = new Date()
+      const timestamp = Date.now() + d.getMilliseconds() // 毫秒级
+      this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + timestamp
       // console.log(event.target.src)
     }
   }
