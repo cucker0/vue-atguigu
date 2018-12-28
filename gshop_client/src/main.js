@@ -9,6 +9,7 @@ import store from './store'
 import { Button } from 'mint-ui'
 
 Vue.component(Button.name, Button) // 注册全局的 <mt-button> 组件标签
+import './mock/mockServer' // 引入mockServer
 
 /* eslint-disable no-new */
 new Vue({
