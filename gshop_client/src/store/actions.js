@@ -7,9 +7,21 @@ import {
   RECIVE_FOODCATEGORYS,
   RECIVE_SHOPS,
   RECIVE_USERINFO,
-  RESET_USERINFO
+  RESET_USERINFO,
+  RECEIVE_GOODS,
+  RECEIVE_SHOP_RATINGS,
+  RECEIVE_SHOP_INFO
 } from './mutation-types'
-import {reqAddress, reqFoodCategorys, reqShops, reqUserInfo, reqLogout} from '../api'
+import {
+  reqAddress,
+  reqFoodCategorys,
+  reqShops,
+  reqUserInfo,
+  reqLogout,
+  reqShopGoods,
+  reqShopRatings,
+  reqShopInfo
+} from '../api'
 
 export default {
   // 异步获取地址
@@ -78,6 +90,33 @@ export default {
     const result = await reqLogout()
     if (result.code === 0) { // 退出登录成功
       commit(RESET_USERINFO)
+    }
+  },
+
+  // 异步获取商家商品列表
+  async getGoods ({commit}) {
+    const result = await reqShopGoods()
+    if (result.code === 0) {
+      const goods = result.data
+      commit(RECEIVE_GOODS, {goods})
+    }
+  },
+
+  // 异步获取商家评价列表
+  async getShopRatings ({commit}) {
+    const result = await reqShopRatings()
+    if (result.code === 0) {
+      const shopRatings = result.data
+      commit(RECEIVE_SHOP_RATINGS, {shopRatings})
+    }
+  },
+
+  async getShopInfo ({commit}) {
+    const result = await reqShopInfo()
+    // console.log(result)
+    if (result.code === 0) {
+      const shopInfo = result.data
+      commit(RECEIVE_SHOP_INFO, {shopInfo})
     }
   }
 }

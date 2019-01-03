@@ -35,3 +35,12 @@ export const reqUserInfo = () => ajax(BASIC_URL + '/userinfo')
 
 // 用户登出
 export const reqLogout = () => ajax(BASIC_URL + '/logout')
+
+// 获取商家信息
+export const reqShopInfo = () => ajax('/shop_info')
+
+// 获取商家评价数据
+export const reqShopRatings = () => ajax('/shop_ratings')
+
+// 获取商家商品数据
+export const reqShopGoods = () => ajax('/goods')

@@ -30,6 +30,9 @@ export default {
     ShopGoods,
     ShopRatings,
     ShopInfo
+  },
+  mounted () {
+    this.$store.dispatch('getGoods')
   }
 }
 </script>
