@@ -19,20 +19,20 @@
 
 <script>
 import ShopHeader from '../../components/ShopHeader/ShopHeader'
-import ShopGoods from './ShopGoods/ShopGoods'
-import ShopRatings from './ShopRatings/ShopRatings'
-import ShopInfo from './ShopInfo/ShopInfo'
+// import ShopGoods from './ShopGoods/ShopGoods'
+// import ShopRatings from './ShopRatings/ShopRatings'
+// import ShopInfo from './ShopInfo/ShopInfo'
 
 export default {
   name: 'Shop',
   components: {
-    ShopHeader,
-    ShopGoods,
-    ShopRatings,
-    ShopInfo
+    ShopHeader
+    // ShopGoods,
+    // ShopRatings,
+    // ShopInfo
   },
   mounted () {
-    this.$store.dispatch('getGoods')
+    this.$store.dispatch('getShopInfo')
   }
 }
 </script>

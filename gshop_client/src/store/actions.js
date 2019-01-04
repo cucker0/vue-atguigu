@@ -111,6 +111,7 @@ export default {
     }
   },
 
+  //  获取获取商家信息
   async getShopInfo ({commit}) {
     const result = await reqShopInfo()
     // console.log(result)

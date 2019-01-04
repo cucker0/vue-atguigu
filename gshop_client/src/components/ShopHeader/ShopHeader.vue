@@ -1,24 +1,24 @@
 <template>
   <div class="shop-header">
-    <nav class="shop-nav">
-      <a class="back">
+    <nav class="shop-nav" :style="{backgroundImage: `url(${shopInfo.bgImg})`}" >
+      <a class="back" @click="$router.back()">
         <i class="iconfont icon-arrow_left"></i>
       </a>
     </nav>
     <div class="shop-content">
       <img class="content-image"
-           src="https://fuss10.elemecdn.com/8/40/02872ce8aefe75c16d3190e75ad61jpeg.jpeg">
+           :src="shopInfo.avatar">
       <div class="header-content"><h2 class="content-title"><span class="content-tag"><span class="mini-tag">品牌</span>
         </span>
-        <span class="content-name">大鸭梨</span>
+        <span class="content-name">{{shopInfo.name}}</span>
         <i class="content-icon"></i>
       </h2>
         <div class="shop-message">
-          <span class="shop-message-detail">5</span>
-          <span class="shop-message-detail">月售 100 单</span>
-          <span class="shop-message-detail">硅谷专送<span>约 30 分钟</span>
+          <span class="shop-message-detail">{{shopInfo.deliveryPrice}}</span>
+          <span class="shop-message-detail">月售 {{shopInfo.sellCount}} 单</span>
+          <span class="shop-message-detail">{{shopInfo.description}}<span>约 {{shopInfo.deliveryTime}} 分钟</span>
           </span>
-          <span class="shop-message-detail">距离 1000m</span>
+          <span class="shop-message-detail">距离 {{shopInfo.distance}}</span>
         </div>
       </div>
     </div>
@@ -28,15 +28,15 @@
           <span class="content-tag">
             <span class="mini-tag">首单</span>
           </span>
-          <span class="activity-content ellipsis">新用户下单立减 17 元</span>
+          <span class="activity-content ellipsis">{{shopInfo.supports[0].content}}</span>
         </div>
       </div>
       <div class="discounts-right">
-        4 个优惠
+        {{shopInfo.supports.length}} 个优惠
       </div>
     </div>
 
-    <div class="shop-brief-modal">
+    <div class="shop-brief-modal" style="display: none">
       <div class="brief-modal-content">
         <h2 class="content-title">
           <span class="content-tag">
