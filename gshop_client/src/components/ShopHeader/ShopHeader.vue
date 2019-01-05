@@ -1,11 +1,12 @@
 <template>
   <div class="shop-header">
     <nav class="shop-nav" :style="{backgroundImage: `url(${shopInfo.bgImg})`}" >
-      <a class="back" @click="$router.back()">
+      <a class="back" @click="$router.replace('/msite')">
         <i class="iconfont icon-arrow_left"></i>
       </a>
     </nav>
-    <div class="shop-content">
+
+    <div class="shop-content" @click="toggleShopShow">
       <img class="content-image"
            :src="shopInfo.avatar">
       <div class="header-content"><h2 class="content-title"><span class="content-tag"><span class="mini-tag">品牌</span>
@@ -14,19 +15,24 @@
         <i class="content-icon"></i>
       </h2>
         <div class="shop-message">
-          <span class="shop-message-detail">{{shopInfo.deliveryPrice}}</span>
-          <span class="shop-message-detail">月售 {{shopInfo.sellCount}} 单</span>
-          <span class="shop-message-detail">{{shopInfo.description}}<span>约 {{shopInfo.deliveryTime}} 分钟</span>
+          <span class="shop-message-detail">{{shopInfo.score}}</span>
+          <span class="shop-message-detail">月售{{shopInfo.sellCount}}单</span>
+          <span class="shop-message-detail">{{shopInfo.description}}<span>约{{shopInfo.deliveryTime}}分钟</span>
           </span>
-          <span class="shop-message-detail">距离 {{shopInfo.distance}}</span>
+          <span class="shop-message-detail">距离{{shopInfo.distance}}</span>
         </div>
       </div>
     </div>
-    <div class="shop-header-discounts">
+
+    <!-- shopInfo.supports有值时才显示,因为shopInfo初始值为{ }, 下面的取了shopInfo的第三层数据，所以会提示未定义 -->
+    <div class="shop-header-discounts" v-if="shopInfo.supports" @click="toggleSupportShow">
       <div class="discounts-left">
-        <div class="activity activity-green">
+        <!-- 使用数组 -->
+        <!--<div class="activity" :class="supportClass[shopInfo.supports[0].type]">-->
+        <!-- 使用字典 -->
+        <div class="activity" :class="supportClass[shopInfo.supports[0].type]">
           <span class="content-tag">
-            <span class="mini-tag">首单</span>
+            <span class="mini-tag">{{shopInfo.supports[0].name}}</span>
           </span>
           <span class="activity-content ellipsis">{{shopInfo.supports[0].content}}</span>
         </div>
@@ -36,95 +42,70 @@
       </div>
     </div>
 
-    <div class="shop-brief-modal" style="display: none">
-      <div class="brief-modal-content">
-        <h2 class="content-title">
+    <transition name="shop">
+      <div class="shop-brief-modal" v-show="shopShow">
+        <div class="brief-modal-content">
+          <h2 class="content-title">
           <span class="content-tag">
             <span class="mini-tag">品牌</span>
           </span>
-          <span class="content-name">嘉禾一品（温都水城）</span>
-        </h2>
-        <ul class="brief-modal-msg">
-          <li>
-            <h3>3.5</h3>
-            <p>评分</p>
+            <span class="content-name">{{shopInfo.name}}</span>
+          </h2>
+          <ul class="brief-modal-msg">
+            <li>
+              <h3>{{shopInfo.score}}</h3>
+              <p>评分</p>
 
-          </li>
-          <li>
-            <h3>90 单</h3>
-            <p>月售</p>
-          </li>
-          <li>
-            <h3>硅谷专送</h3>
-            <p>约 28 分钟</p>
-          </li>
-          <li>
-            <h3>4 元</h3>
-            <p>配送费用</p>
-          </li>
-          <li>
-            <h3>1000m</h3>
-            <p>距离</p>
-          </li>
-        </ul>
-        <h3 class="brief-modal-title"><span>公告</span></h3>
-        <div class="brief-modal-notice">
-          是以粥为特色的中式营养快餐，自 2004 年 10 月 18 日创立“嘉和一品”品牌至今
+            </li>
+            <li>
+              <h3>{{shopInfo.sellCount}} 单</h3>
+              <p>月售</p>
+            </li>
+            <li>
+              <h3>{{description}}</h3>
+              <p>约 {{shopInfo.deliveryTime}} 分钟</p>
+            </li>
+            <li>
+              <h3>{{shopInfo.deliveryPrice}} 元</h3>
+              <p>配送费用</p>
+            </li>
+            <li>
+              <h3>{{shopInfo.distance}}</h3>
+              <p>距离</p>
+            </li>
+          </ul>
+          <h3 class="brief-modal-title"><span>公告</span></h3>
+          <div class="brief-modal-notice">
+            {{shopInfo.bulletin}}
+          </div>
+          <div class="mask-footer" @click="toggleShopShow">
+            <span class="iconfont icon-close"></span>
+          </div>
         </div>
-        <div class="mask-footer">
-          <span class="iconfont icon-close"></span>
-        </div>
+        <div class="brief-modal-cover"></div>
       </div>
-      <div class="brief-modal-cover"></div>
-    </div>
+    </transition>
 
-    <div class="activity-sheet" style="display: none">
-      <div class="activity-sheet-content">
-        <h2 class="activity-sheet-title">优惠活动</h2>
-        <ul class="list">
-          <li class="activity-item activity-green">
+    <transition name="support">
+      <div class="activity-sheet" v-show="supportShow">
+        <div class="activity-sheet-content">
+          <h2 class="activity-sheet-title">优惠活动</h2>
+          <ul class="list">
+            <li class="activity-item" :class="supportClass[support.type]" v-for="(support, index) in shopInfo.supports" :key="index">
           <span class="content-tag">
-            <span class="mini-tag">首单</span>
+            <span class="mini-tag">{{support.name}}</span>
           </span>
-            <span class="activity-content">新用户下单立减 17 元(不与其它活动同享)</span>
-          </li>
-          <li class="activity-item activity-red">
-            <span class="content-tag">
-              <span class="mini-tag">满减</span>
-            </span>
-            <span class="activity-content">满 35 减 19，满 65 减 35</span>
-          </li>
-          <li class="activity-item activity-orange">
-            <span class="content-tag">
-              <span class="mini-tag">特价</span>
-            </span>
-            <span class="activity-content">【立减 19.5 元】欢乐小食餐</span>
-          </li>
-          <li class="activity-item activity-green">
-            <span class="content-tag">
-              <span class="mini-tag">首单</span>
-            </span>
-            <span class="activity-content">新用户下单立减 17 元(不与其它活动同享)</span>
-          </li>
-          <li class="activity-item activity-red">
-            <span class="content-tag">
-              <span class="mini-tag">满减</span>
-            </span>
-            <span class="activity-content">满 35 减 19，满 65 减 35</span>
-          </li>
-          <li class="activity-item activity-orange">
-            <span class="content-tag">
-              <span class="mini-tag">特价</span>
-            </span>
-            <span class="activity-content">【立减 19.5 元】欢乐小食餐</span>
-          </li>
-        </ul>
-        <div class="activity-sheet-close">
-          <span class="iconfont icon-close"></span>
+              <span class="activity-content">{{support.content}}</span>
+            </li>
+          </ul>
+          <div class="activity-sheet-close" @click="toggleSupportShow">
+            <span class="iconfont icon-close"></span>
+          </div>
         </div>
+        <div class="activity-sheet-cover"></div>
       </div>
-      <div class="activity-sheet-cover"></div>
-    </div>
+    </transition>
+
   </div>
 </template>
 
@@ -132,8 +113,24 @@
 import {mapState} from 'vuex'
 export default {
   name: 'ShopHeader',
+  data () {
+    return {
+      // supportClass: ['activity-green', 'activity-red', 'activity-orange']
+      supportClass: {'0': 'activity-green', '1': 'activity-red', '2': 'activity-orange'},
+      shopShow: false, // 商家信息显示开关
+      supportShow: false // 优惠活动显示开关
+    }
+  },
   computed: {
     ...mapState(['shopInfo'])
+  },
+  methods: {
+    toggleShopShow () { // 切换 shopShow
+      this.shopShow = !this.shopShow
+    },
+    toggleSupportShow () { // 切换supportShow
+      this.supportShow = !this.supportShow
+    }
   }
 }
 </script>
@@ -328,9 +325,9 @@ export default {
       z-index 52
       flex-direction column
       color #333
-      &.fade-enter-active,&.fade-leave-active
-        transition opacity .5s
-      &.fade-enter,&.fade-leave-to
+      &.shop-enter-active,&.shop-leave-active
+        transition opacity 0.5s
+      &.shop-enter,&.shop-leave-to
         opacity 0
       .brief-modal-cover
         position absolute
@@ -434,6 +431,10 @@ export default {
       width 100%
       height 100%
       z-index 99
+      &.support-enter-active,&.support-leave-active
+        transition opacity 0.5s
+      &.support-enter,&.support-leave-to
+        opacity 0
       .activity-sheet-content
         position absolute
         background-color #f5f5f5
