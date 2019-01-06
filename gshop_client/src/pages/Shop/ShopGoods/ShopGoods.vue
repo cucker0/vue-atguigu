@@ -4,7 +4,7 @@
       <div class="menu-wrapper" ref="menuWrapper">
         <ul>
           <!-- current -->
-          <li class="menu-item" v-for="(good, index) in goods" :key="index">
+          <li class="menu-item" v-for="(good, index) in goods" :key="index" :class="{current: index === currentIndex2}">
             <span class="text bottom-border-1px">
               <img class="icon" :src="good.icon" v-if="good.icon">
               {{good.name}}
@@ -14,7 +14,7 @@
       </div>
 
       <div class="foods-wrapper" ref="foodsWrapper">
-        <ul>
+        <ul ref="foodsUI">
           <li class="food-list-hook" v-for="(good, index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
@@ -39,7 +39,6 @@
               </li>
             </ul>
           </li>
-
         </ul>
       </div>
     </div>
@@ -48,11 +47,13 @@
 
 <script>
 import {mapState} from 'vuex'
+import BScroll from 'better-scroll'
+
 export default {
   name: 'ShopGoods',
   data () {
     return {
-      scorllY: 0, // 右侧滑动的Y轴坐标（滑动过程中实时变化）
+      scrollY: 0, // 右侧滑动的Y轴坐标（滑动过程中实时变化）
       tops: [] // 所有右侧分类li的top组成的数组（列表第一次显示后就不再变化）
     }
   },
@@ -60,11 +61,76 @@ export default {
     ...mapState(['goods']),
     // 计算得到当前分类的下标
     currentIndex () {
+      // 得到条件数据
+      const {scrollY, tops} = this
+      // 根据条件计算生产一个结果
+      const index = tops.findIndex((top, index) => {
+        // scrollY >= 当前top && < 下一个top
+        return scrollY >= top && scrollY < tops[index + 1]
+      })
 
+      // 返回结果
+      console.log('index:', index)
+      return index
+    },
+    currentIndex2 () { // 版本2
+      const {scrollY, tops} = this
+      for (var i=0; i < tops.length; i++) {
+        if (scrollY >= tops[i] && scrollY < tops[i + 1]) {
+          return i
+        }
+      }
     }
   },
   mounted () {
     this.$store.dispatch('getGoods') // 请求获取goods
+      .then(() => { // 数据更新后执行
+        console.log('test dispatch ...')
+        this.$nextTick(() => { // 列表数据更新显示后执行
+          this._initScroll()
+          this._initTops()
+        })
+      })
+  },
+  methods: {
+    // 初始化滚动条
+    _initScroll () {
+      // 列表显示之后创建
+      const goodsScroll = new BScroll('.menu-wrapper', {
+
+      })
+      const foodsScroll = new BScroll('.foods-wrapper', {
+        probeType: 2 // 1:会非实时（屏幕滑动超过一定时间后）派发scroll 事件 2:会在屏幕滑动的过程中实时的派发 scroll 事件,当松开手后惯性滑动不会 3:惯性滑动中也会派发scroll事件
+      })
+      // 给右侧foods列表绑定scroll监听
+      foodsScroll.on('scroll', ({x, y}) => {
+        console.log(x, y)
+        this.scrollY = Math.abs(y)
+      })
+      // 给右侧foods列表绑定scroll停止滑动监听
+      foodsScroll.on('scrollEnd', ({x, y}) => {
+        console.log('scrollEnd:', x, y)
+        this.scrollY = Math.abs(y)
+      })
+    },
+    // 初始化tops
+    _initTops () {
+      // 1.初始化tops
+      const tops = []
+      let top = 0
+      tops.push(top)
+      // 2.收集
+      // const lis = document.getElementsByClassName('food-list-hook') // 查找食物分类li的标签,document是在整个dom中查找
+      const lis = this.$refs.foodsUI.getElementsByClassName('food-list-hook') // 查找食物分类li的标签，此时lis为一个伪数组
+      // Array.prototype.slice.call() // 把伪数组变成真数组
+      Array.prototype.slice.call(lis).forEach(li => {
+        top += li.clientHeight
+        tops.push(top)
+      })
+      // 3.更新数据
+      this.tops = tops
+      console.log('tops:', tops)
+    }
   }
 }
 </script>

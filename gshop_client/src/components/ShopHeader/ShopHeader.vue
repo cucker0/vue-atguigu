@@ -62,7 +62,7 @@
               <p>月售</p>
             </li>
             <li>
-              <h3>{{description}}</h3>
+              <h3>{{shopInfo.description}}</h3>
               <p>约 {{shopInfo.deliveryTime}} 分钟</p>
             </li>
             <li>
