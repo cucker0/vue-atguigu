@@ -10,8 +10,11 @@ import {
   RESET_USERINFO,
   RECEIVE_GOODS,
   RECEIVE_SHOP_RATINGS,
-  RECEIVE_SHOP_INFO
+  RECEIVE_SHOP_INFO,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT
 } from './mutation-types'
+import Vue from 'vue'
 
 export default {
   [RECIVE_ADDRESS] (state, {address}) {
@@ -38,5 +41,22 @@ export default {
   },
   [RECEIVE_SHOP_RATINGS] (state, {shopRatings}) {
     state.shopRatings = shopRatings
+  },
+  [INCREMENT_FOOD_COUNT] (state, {food}) {
+    if (!food.count) { // 第一次点击 +
+      // food.count = 1 // 这种方法，新增属性没有数据绑定，虽然值更新了，但不会自动更新界面
+      /*
+      * 让新增的属性有数据绑定效果方法
+      * Vue.set(对象, 属性名, 属性值)   其中属性名为字符串类型数据
+      * */
+      Vue.set(food, 'count', 1)
+    } else {
+      food.count++
+    }
+  },
+  [DECREMENT_FOOD_COUNT] (state, {food}) {
+    if (food.count > 0) {
+      food.count--
+    }
   }
 }

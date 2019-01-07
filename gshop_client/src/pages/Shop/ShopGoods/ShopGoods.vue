@@ -34,7 +34,7 @@
                     <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                   </div>
                   <div class="cartcontrol-wrapper">
-                    CartControl
+                    <CartControl :food="food"></CartControl>
                   </div>
                 </div>
               </li>
@@ -49,6 +49,7 @@
 <script>
 import {mapState} from 'vuex'
 import BScroll from 'better-scroll' // http://ustbhuangyi.github.io/better-scroll/doc/api.html
+import CartControl from '../../../components/CartControl/CardControl'
 
 export default {
   name: 'ShopGoods',
@@ -57,6 +58,9 @@ export default {
       scrollY: 0, // 右侧滑动的Y轴坐标（滑动过程中实时变化）
       tops: [] // 所有右侧分类li的top组成的数组（列表第一次显示后就不再变化）
     }
+  },
+  components: {
+    CartControl
   },
   computed: {
     ...mapState(['goods']),
@@ -98,9 +102,10 @@ export default {
     _initScroll () {
       // 列表显示之后创建
       const goodsScroll = new BScroll('.menu-wrapper', {
-
+        click: true
       })
       this.foodsScroll = new BScroll('.foods-wrapper', {
+        click: true,
         probeType: 2 // 1:会非实时（屏幕滑动超过一定时间后）派发scroll 事件 2:会在屏幕滑动的过程中实时的派发 scroll 事件,当松开手后惯性滑动不会 3:惯性滑动中也会派发scroll事件
       })
       // 给右侧foods列表绑定scroll监听
@@ -169,7 +174,7 @@ export default {
           z-index: 10
           margin-top: -1px
           background: #fff
-          color: green
+          color: $green
           font-weight: 700
           .text
             border-none()
