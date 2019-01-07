@@ -4,7 +4,8 @@
       <div class="menu-wrapper" ref="menuWrapper">
         <ul>
           <!-- current -->
-          <li class="menu-item" v-for="(good, index) in goods" :key="index" :class="{current: index === currentIndex2}">
+          <li class="menu-item" v-for="(good, index) in goods" :key="index" :class="{current: index === currentIndex2}"
+              @click="clickMenuItem(index)">
             <span class="text bottom-border-1px">
               <img class="icon" :src="good.icon" v-if="good.icon">
               {{good.name}}
@@ -15,7 +16,7 @@
 
       <div class="foods-wrapper" ref="foodsWrapper">
         <ul ref="foodsUI">
-          <li class="food-list-hook" v-for="(good, index) in goods" :key="index">
+          <li class="food-list-hook" v-for="(good, index) in goods" :key="index" >
             <h1 class="title">{{good.name}}</h1>
             <ul>
               <li class="food-item bottom-border-1px" v-for="(food, index) in good.foods" :key="index">
@@ -47,7 +48,7 @@
 
 <script>
 import {mapState} from 'vuex'
-import BScroll from 'better-scroll'
+import BScroll from 'better-scroll' // http://ustbhuangyi.github.io/better-scroll/doc/api.html
 
 export default {
   name: 'ShopGoods',
@@ -75,7 +76,7 @@ export default {
     },
     currentIndex2 () { // 版本2
       const {scrollY, tops} = this
-      for (var i=0; i < tops.length; i++) {
+      for (var i = 0; i < tops.length; i++) {
         if (scrollY >= tops[i] && scrollY < tops[i + 1]) {
           return i
         }
@@ -99,16 +100,16 @@ export default {
       const goodsScroll = new BScroll('.menu-wrapper', {
 
       })
-      const foodsScroll = new BScroll('.foods-wrapper', {
+      this.foodsScroll = new BScroll('.foods-wrapper', {
         probeType: 2 // 1:会非实时（屏幕滑动超过一定时间后）派发scroll 事件 2:会在屏幕滑动的过程中实时的派发 scroll 事件,当松开手后惯性滑动不会 3:惯性滑动中也会派发scroll事件
       })
       // 给右侧foods列表绑定scroll监听
-      foodsScroll.on('scroll', ({x, y}) => {
+      this.foodsScroll.on('scroll', ({x, y}) => {
         console.log(x, y)
         this.scrollY = Math.abs(y)
       })
       // 给右侧foods列表绑定scroll停止滑动监听
-      foodsScroll.on('scrollEnd', ({x, y}) => {
+      this.foodsScroll.on('scrollEnd', ({x, y}) => {
         console.log('scrollEnd:', x, y)
         this.scrollY = Math.abs(y)
       })
@@ -130,6 +131,14 @@ export default {
       // 3.更新数据
       this.tops = tops
       console.log('tops:', tops)
+    },
+    clickMenuItem (index) { //  使右侧列表滑动到指定的坐标位置
+      console.log(this.tops[index])
+      const scrollY = this.tops[index]
+      if (this.scrollY !== scrollY) {
+        this.scrollY = scrollY // 立即让点击的分类项class改变成当前分类样式
+        this.foodsScroll.scrollTo(0, -scrollY, 300) // 平滑滑动右侧food列表
+      }
     }
   }
 }
@@ -160,7 +169,7 @@ export default {
           z-index: 10
           margin-top: -1px
           background: #fff
-          color: $green
+          color: green
           font-weight: 700
           .text
             border-none()
