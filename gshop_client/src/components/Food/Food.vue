@@ -16,10 +16,10 @@
         </div>
         <div class="price">
           <span class="now">￥{{food.price}}</span>
-          <span class="old" style="display: none;">￥</span>
+          <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
         </div>
         <div class="cartcontrol-wrapper">
-          cartcontrol 组件
+          <CartControl :food="food"></CartControl>
         </div>
       </div>
     </div>
@@ -28,22 +28,27 @@
 </template>
 
 <script>
-	export default {
-		name: 'Food',
-    props: {
-		  food: Object
-    },
-    data () {
-		  return {
-        isShow: false // 本组件是否显示
-      }
-    },
-    methods: {
-		  toggleShow () { //更新isShow
-        this.isShow = !this.isShow
-      }
+import CartControl from '../CartControl/CardControl'
+
+export default {
+  name: 'Food',
+  props: {
+    food: Object
+  },
+  components: {
+    CartControl
+  },
+  data () {
+    return {
+      isShow: false // 本组件是否显示
     }
-	}
+  },
+  methods: {
+    toggleShow () { // 更新isShow
+      this.isShow = !this.isShow
+    }
+  }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
