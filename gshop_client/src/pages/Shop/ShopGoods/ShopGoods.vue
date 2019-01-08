@@ -19,7 +19,7 @@
           <li class="food-list-hook" v-for="(good, index) in goods" :key="index" >
             <h1 class="title">{{good.name}}</h1>
             <ul>
-              <li class="food-item bottom-border-1px" v-for="(food, index) in good.foods" :key="index">
+              <li class="food-item bottom-border-1px" v-for="(food, index) in good.foods" :key="index" @click="showFood(food)">
                 <div class="icon">
                   <img width="57" height="57" :src="food.icon">
                 </div>
@@ -43,6 +43,7 @@
         </ul>
       </div>
     </div>
+    <Food :food="food" ref="food"></Food>
   </div>
 </template>
 
@@ -50,17 +51,20 @@
 import {mapState} from 'vuex'
 import BScroll from 'better-scroll' // http://ustbhuangyi.github.io/better-scroll/doc/api.html
 import CartControl from '../../../components/CartControl/CardControl'
+import Food from '../../../components/Food/Food'
 
 export default {
   name: 'ShopGoods',
   data () {
     return {
       scrollY: 0, // 右侧滑动的Y轴坐标（滑动过程中实时变化）
-      tops: [] // 所有右侧分类li的top组成的数组（列表第一次显示后就不再变化）
+      tops: [], // 所有右侧分类li的top组成的数组（列表第一次显示后就不再变化）
+      food: {} // 被点击的food对象
     }
   },
   components: {
-    CartControl
+    CartControl,
+    Food
   },
   computed: {
     ...mapState(['goods']),
@@ -144,6 +148,13 @@ export default {
         this.scrollY = scrollY // 立即让点击的分类项class改变成当前分类样式
         this.foodsScroll.scrollTo(0, -scrollY, 300) // 平滑滑动右侧food列表
       }
+    },
+    // 显示点击的food
+    showFood (food) {
+      // 更新food
+      this.food = food
+      // 显示food组件(在父组件中调用子组件对象方法，通过refs找到子组件对象)
+      this.$refs.food.toggleShow()
     }
   }
 }
