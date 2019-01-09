@@ -2,7 +2,7 @@
   <div>
     <div class="shopcart">
       <div class="content">
-        <div class="content-left">
+        <div class="content-left" @click="toggleShow">
           <div class="logo-wrapper">
             <div class="logo" :class="{highlight: totalCount}">
               <i class="iconfont icon-shopping_cart" :class="{highlight: totalCount}"></i>
@@ -14,59 +14,72 @@
         </div>
         <div class="content-right">
           <div class="pay" :class="payClass">
-            还差￥10元起送{{payText}}
+            {{payText}}
           </div>
         </div>
       </div>
-      <div class="shopcart-list" v-show="totalCount">
+      <div class="shopcart-list" v-show="isShow">
         <div class="list-header">
           <h1 class="title">购物车</h1>
           <span class="empty">清空</span>
         </div>
         <div class="list-content">
           <ul>
-            <li class="food">
-              <span class="name">红枣山药糙米粥</span>
-              <div class="price"><span>￥10</span></div>
+            <li class="food" v-for="(food, index) in cartFoods" :key="index">
+              <span class="name">{{food.name}}</span>
+              <div class="price"><span>￥{{food.price}}</span></div>
               <div class="cartcontrol-wrapper">
-                <div class="cartcontrol">
-                  <div class="iconfont icon-remove_circle_outline"></div>
-                  <div class="cart-count">1</div>
-                  <div class="iconfont icon-add_circle"></div>
-                </div>
+                <CardControl :food="food"/>
               </div>
             </li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="list-mask" style="display: none;"></div>
+    <!-- 遮罩层 -->
+    <div class="list-mask" v-show="isShow" @click="toggleShow"></div>
   </div>
 </template>
 
 <script>
 import {mapState, mapGetters} from 'vuex'
+import CardControl from '../../components/CartControl/CardControl'
+
 export default {
   name: 'ShopCart',
+  data () {
+    return {
+      isShow: false // 购物清单显示状态
+    }
+  },
+  components: {
+    CardControl
+  },
+  methods: {
+    toggleShow () { // 购物清单显示开关
+      this.isShow = !this.isShow
+    }
+  },
   computed: {
     ...mapState(['shopInfo', 'cartFoods']),
     ...mapGetters(['totalCount', 'totalPrice']),
     // 是否去支付的样式
     payClass () {
-      const minPrice = this.shopInfo
-      const totalPrice = this
+      const {totalPrice} = this
+      const {minPrice} = this.shopInfo
       return totalPrice >= minPrice ? 'enough' : 'not-enough'
     },
     // 支付提示文本
     payText () {
-      const minPrice = this.shopInfo
-      const totalPrice = this
+      const {totalPrice} = this
+      const {minPrice} = this.shopInfo
+      // console.log('totalPrice:', totalPrice, minPrice)
       if (totalPrice === 0) { // 未选择任何物品
         return `￥${minPrice}起送`
       } else if (totalPrice < minPrice) { // 总价 < 起送价
         return `还差￥${minPrice - totalPrice}起送`
       } else {
-        return '去结算'
+        return '结算'
       }
     }
   }

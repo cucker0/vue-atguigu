@@ -50,6 +50,7 @@ export default {
       * Vue.set(对象, 属性名, 属性值)   其中属性名为字符串类型数据
       * */
       Vue.set(food, 'count', 1)
+      state.cartFoods.push(food) // 物品加入到购物车
     } else {
       food.count++
     }
@@ -57,6 +58,9 @@ export default {
   [DECREMENT_FOOD_COUNT] (state, {food}) {
     if (food.count > 0) {
       food.count--
+    } else if (food.count === 0) { // 当一个物品的count为0时从购物车去掉该物品
+      state.cartFoods.slice(state.cartFoods.indexOf(food), 1)
     }
   }
+
 }
