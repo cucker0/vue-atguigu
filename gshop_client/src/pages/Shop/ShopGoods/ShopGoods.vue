@@ -63,7 +63,9 @@ export default {
     return {
       scrollY: 0, // 右侧滑动的Y轴坐标（滑动过程中实时变化）
       tops: [], // 所有右侧分类li的top组成的数组（列表第一次显示后就不再变化）
-      food: {} // 被点击的food对象
+      food: {}, // 被点击的food对象
+      menuWrapperHeight: 0, // menuWrapper标签高度
+      goodsTops: [] // 左侧menu-item所有li的top组成的数据
     }
   },
   components: {
@@ -87,7 +89,7 @@ export default {
       console.log('index:', index)
       return index
     },
-    currentIndex2 () { // 版本2
+    currentIndex2 () { // 计算得到当前分类的下标 版本2
       const {scrollY, tops} = this
       for (var i = 0; i < tops.length; i++) {
         if (scrollY >= tops[i] && scrollY < tops[i + 1]) {
@@ -146,7 +148,19 @@ export default {
       this.tops = tops
       console.log('tops:', tops)
     },
-    clickMenuItem (index) { //  使右侧列表滑动到指定的坐标位置
+    _initGoodsTops () {
+      const tops = []
+      let top = 0
+      const lis = this.$refs.menuWrapper.getElementsByClassName('menu-item')
+      Array.prototype.slice.call(lis).forEach(li => {
+        top += li.clientHeight
+        tops.push(top)
+      })
+      this.goodsTops = tops
+      console.log('goodsTops:', tops)
+    },
+    // 点击左侧goods列表，使右侧列表滑动到指定的坐标位置
+    clickMenuItem (index) {
       console.log(this.tops[index])
       const scrollY = this.tops[index]
       if (this.scrollY !== scrollY) {
