@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <div class="shopcart-list" v-show="isShow">
+      <div class="shopcart-list" v-show="listShow">
         <div class="list-header">
           <h1 class="title">购物车</h1>
           <span class="empty">清空</span>
@@ -37,7 +37,7 @@
       </div>
     </div>
     <!-- 遮罩层 -->
-    <div class="list-mask" v-show="isShow" @click="toggleShow"></div>
+    <div class="list-mask" v-show="listShow" @click="toggleShow"></div>
   </div>
 </template>
 
@@ -57,7 +57,9 @@ export default {
   },
   methods: {
     toggleShow () { // 购物清单显示开关
-      this.isShow = !this.isShow
+      if (this.totalCount > 0) {
+        this.isShow = !this.isShow
+      }
     }
   },
   computed: {
@@ -81,6 +83,15 @@ export default {
       } else {
         return '结算'
       }
+    },
+    // 计算购物清单及遮罩层是否显示
+    listShow () {
+      // totalPrice = 0时 不显示
+      if (this.totalCount === 0) {
+        this.isShow = false
+        return false
+      }
+      return this.isShow
     }
   }
 }
