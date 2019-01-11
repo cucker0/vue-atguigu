@@ -65,7 +65,8 @@ export default {
       tops: [], // 所有右侧分类li的top组成的数组（列表第一次显示后就不再变化）
       food: {}, // 被点击的food对象
       menuWrapperHeight: 0, // menuWrapper标签高度
-      goodsTops: [] // 左侧menu-item所有li的top组成的数据
+      goodsTops: [], // 左侧menu-item所有li的top组成的数据
+      goodsScrollY: 0 // 左侧menu-item 滑动的Y轴坐标
     }
   },
   components: {
@@ -87,12 +88,14 @@ export default {
 
       // 返回结果
       console.log('index:', index)
+      this.menuItemToScroll(index) // 左侧goods菜单若被被遮住，自动向上滚动
       return index
     },
     currentIndex2 () { // 计算得到当前分类的下标 版本2
       const {scrollY, tops} = this
       for (var i = 0; i < tops.length; i++) {
         if (scrollY >= tops[i] && scrollY < tops[i + 1]) {
+          this.menuItemToScroll(i) // 左侧goods菜单若被被遮住，自动向上滚动
           return i
         }
       }
@@ -105,6 +108,7 @@ export default {
         this.$nextTick(() => { // 列表数据更新显示后执行
           this._initScroll()
           this._initTops()
+          this._initGoodsTops()
         })
       })
   },
@@ -112,8 +116,9 @@ export default {
     // 初始化滚动条
     _initScroll () {
       // 列表显示之后创建
-      const goodsScroll = new BScroll('.menu-wrapper', {
-        click: true
+      this.goodsScroll = new BScroll('.menu-wrapper', {
+        click: true,
+        probeType: 2
       })
       this.foodsScroll = new BScroll('.foods-wrapper', {
         click: true,
@@ -148,6 +153,7 @@ export default {
       this.tops = tops
       console.log('tops:', tops)
     },
+    // 初始化左侧goods分类列表tops
     _initGoodsTops () {
       const tops = []
       let top = 0
@@ -158,6 +164,8 @@ export default {
       })
       this.goodsTops = tops
       console.log('goodsTops:', tops)
+      // 获取 menuWrapper标签的高度
+      this.menuWrapperHeight = this.$refs.menuWrapper.clientHeight
     },
     // 点击左侧goods列表，使右侧列表滑动到指定的坐标位置
     clickMenuItem (index) {
@@ -174,6 +182,20 @@ export default {
       this.food = food
       // 显示food组件(在父组件中调用子组件对象方法，通过refs找到子组件对象)
       this.$refs.food.toggleShow()
+    },
+    // 判断左侧的gooods菜单当前活动的项是否能显示，在底部不能显示时，需要向上滚动到能显示的地方。
+    menuItemToScroll (index) {
+      const {menuWrapperHeight, goodsTops} = this
+      if (goodsTops[index] > menuWrapperHeight) { // 当前goods项被底部遮住
+        const offset = goodsTops[index] - menuWrapperHeight
+        this.goodsScrollY = -offset
+        this.goodsScroll.scrollTo(0, -offset, 300) // 左侧goods菜单向上移动
+      } else { // 左侧goods菜单最前面内容一屏能显示出来
+        if (this.goodsScrollY !== 0) {
+          this.goodsScroll.scrollTo(0, 0, 300) // 滚动到起始位置
+          this.goodsScrollY = 0
+        }
+      }
     }
   }
 }

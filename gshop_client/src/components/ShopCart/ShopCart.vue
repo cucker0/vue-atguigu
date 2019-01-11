@@ -60,6 +60,9 @@ export default {
       if (this.totalCount > 0) {
         this.isShow = !this.isShow
       }
+    },
+    setIsShow2False () {
+      this.isShow = false
     }
   },
   computed: {
@@ -88,11 +91,25 @@ export default {
     listShow () {
       // totalPrice = 0时 不显示
       if (this.totalCount === 0) {
-        this.isShow = false
+        // this.isShow = false // 报错：Unexpected side effect in "listShow" computed property，此时用下面的方式，当然也可以写一个method，然后调用这个method
+        this.setIsShow2False()
         return false
       }
       return this.isShow
     }
+    /* eslint-disable */
+    /*listShow: {
+      get () {
+        return this.isShow
+      },
+      set () {
+        if (this.totalCount === 0) {
+          this.isShow = false
+          return false
+        }
+        return this.isShow
+      }
+    }*/
   }
 }
 </script>
