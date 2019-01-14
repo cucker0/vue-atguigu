@@ -12,7 +12,8 @@ import {
   RECEIVE_SHOP_RATINGS,
   RECEIVE_SHOP_INFO,
   INCREMENT_FOOD_COUNT,
-  DECREMENT_FOOD_COUNT
+  DECREMENT_FOOD_COUNT,
+  CLEAR_CART
 } from './mutation-types'
 import Vue from 'vue'
 
@@ -62,6 +63,14 @@ export default {
         state.cartFoods.splice(state.cartFoods.indexOf(food), 1)
       }
     }
+  },
+  [CLEAR_CART] (state) {
+    // 重置购物车中food的count，或移除该属性也可以
+    state.cartFoods.forEach(food => {
+      food.count = 0 // 删除属性可用 vm.$delete( target, key )
+    })
+    // 移除购物车中的food项
+    state.cartFoods = []
   }
 
 }

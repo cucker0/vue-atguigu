@@ -13,16 +13,16 @@
           <div class="desc">另需配送费￥{{shopInfo.deliveryPrice}}元</div>
         </div>
         <div class="content-right">
-          <div class="pay" :class="payClass">
+          <RouterLink :to="{name: 'Pay'}" class="pay" :class="payClass">
             {{payText}}
-          </div>
+          </RouterLink>
         </div>
       </div>
       <transition name="move">
         <div class="shopcart-list" v-show="listShow">
           <div class="list-header">
             <h1 class="title">购物车</h1>
-            <span class="empty">清空</span>
+            <span class="empty" @click="clearCart">清空</span>
           </div>
           <div class="list-content">
             <ul>
@@ -50,6 +50,8 @@
 <script>
 import {mapState, mapGetters} from 'vuex'
 import CardControl from '../CartControl/CartControl'
+import BScroll from 'better-scroll'
+import { MessageBox } from 'mint-ui'
 
 export default {
   name: 'ShopCart',
@@ -69,6 +71,16 @@ export default {
     },
     setIsShow2False () {
       this.isShow = false
+    },
+    clearCart () { // 清空购物车
+      MessageBox.confirm('确定退出吗?').then(
+        action => { // 确定
+          this.$store.dispatch('clearCart')
+        },
+        action => { // 取消
+
+        }
+      )
     }
   },
   computed: {
@@ -94,28 +106,53 @@ export default {
       }
     },
     // 计算购物清单及遮罩层是否显示
-    listShow () {
+    /* eslint-disable */
+    /*listShow () {
       // totalPrice = 0时 不显示
       if (this.totalCount === 0) {
         // this.isShow = false // 报错：Unexpected side effect in "listShow" computed property，此时用下面的方式，当然也可以写一个method，然后调用这个method
         this.setIsShow2False()
         return false
       }
+      // 显示购物车清单列表时，绑定BScroll滑动
+      if (this.isShow) {
+        this.$nextTick(() => {
+          if (!this.listContentScroll) { // 确保BScroll实例为单例，
+            this.listContentScroll = new BScroll('.list-content', {
+              click: true
+            })
+          } else {
+            this.listContentScroll.refresh() // 刷新流动条，重新计算内容的高度；否则出现第一次滚动不了的情况
+          }
+        })
+      }
       return this.isShow
-    }
-    /* eslint-disable */
-    /*listShow: {
+    }*/
+
+    listShow: {
       get () {
-        return this.isShow
-      },
-      set () {
-        if (this.totalCount === 0) {
+        if (this.totalCount === 0) { // 购物车物品为0时，设置isShow为false
           this.isShow = false
           return false
         }
+        // 显示购物车清单列表时，绑定BScroll滑动
+        if (this.isShow) {
+          this.$nextTick(() => {
+            if (!this.listContentScroll) { // 确保listContentScroll实例为单例
+              this.listContentScroll = new BScroll('.list-content', {
+                click: true
+              })
+            } else {
+              this.listContentScroll.refresh() // 重新刷新高度
+            }
+          })
+        }
         return this.isShow
+      },
+      set () {
+        console.log('listShow set()')
       }
-    }*/
+    }
   }
 }
 </script>
@@ -205,6 +242,7 @@ export default {
           font-size 12px
           font-weight 700
           color #fff
+          display block
           &.not-enough
             background #2b333b
           &.enough

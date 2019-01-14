@@ -13,6 +13,7 @@ import Shop from '../pages/Shop/Shop'
 import ShopGoods from '../pages/Shop/ShopGoods/ShopGoods'
 import ShopRatings from '../pages/Shop/ShopRatings/ShopRatings'
 import ShopInfo from '../pages/Shop/ShopInfo/ShopInfo'
+import Pay from '../components/Pay/Pay'
 
 // 声明使用vue-router插件
 Vue.use(Router)
@@ -79,6 +80,11 @@ export default new Router({
           redirect: '/shop/goods'
         }
       ]
+    },
+    {
+      path: '/pay',
+      name: 'Pay',
+      component: Pay
     }
   ]
 })
