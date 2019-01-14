@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'CardControl',
+  name: 'CartControl',
   props: {
     food: Object
   },

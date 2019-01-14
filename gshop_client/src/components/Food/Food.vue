@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import CartControl from '../CartControl/CardControl'
+import CartControl from '../CartControl/CartControl'
 
 export default {
   name: 'Food',

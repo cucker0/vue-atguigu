@@ -53,7 +53,7 @@
 <script>
 import {mapState} from 'vuex'
 import BScroll from 'better-scroll' // http://ustbhuangyi.github.io/better-scroll/doc/api.html
-import CartControl from '../../../components/CartControl/CardControl'
+import CartControl from '../../../components/CartControl/CartControl'
 import Food from '../../../components/Food/Food'
 import ShopCart from '../../../components/ShopCart/ShopCart'
 
@@ -115,7 +115,9 @@ export default {
   methods: {
     // 初始化滚动条
     _initScroll () {
-      // 列表显示之后创建
+      // 列表显示之后创建 (pc上使用谷歌浏览器测试发现一个bug,先以pc模式打开网站，浏览器f12切换到手机设备，
+      // 然后访问http://localhost:8080/#/shop/goods，发现左侧、右侧菜单都无法滑动，只有再刷新一次就可以了)
+      // 如果F12 先选择手机设备模式，再打开网站正常。
       this.goodsScroll = new BScroll('.menu-wrapper', {
         click: true,
         probeType: 2
