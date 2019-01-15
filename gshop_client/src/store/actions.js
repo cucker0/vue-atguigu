@@ -106,11 +106,15 @@ export default {
   },
 
   // 异步获取商家评价列表
-  async getShopRatings ({commit}) {
-    const result = await reqShopRatings()
+  async getShopRatings ({commit}, {shopId, callback}) {
+    // commit
+    // {}:要传的数据，这里可以包含函数
+    const result = await reqShopRatings(shopId)
     if (result.code === 0) {
       const shopRatings = result.data
       commit(RECEIVE_SHOP_RATINGS, {shopRatings})
+      // 数据更新了，通知一下组件
+      callback && callback()
     }
   },
 

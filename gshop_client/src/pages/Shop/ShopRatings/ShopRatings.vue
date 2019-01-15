@@ -3,39 +3,39 @@
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
-          <h1 class="score">4.7</h1>
+          <h1 class="score">{{shopInfo.score}}</h1>
           <div class="title">综合评分</div>
-          <div class="rank">高于周边商家 99%</div>
+          <div class="rank">高于周边商家 {{shopInfo.rankRate}}%</div>
         </div>
         <div class="overview-right">
           <div class="score-wrapper">
             <span class="title">服务态度</span>
-            <Star :score="4.6" :size="36" />
-            <span class="score">4.6</span>
+            <Star :score="shopInfo.serviceScore" :size="36" />
+            <span class="score">{{shopInfo.serviceScore}}</span>
           </div>
           <div class="score-wrapper">
             <span class="title">商品评分</span>
             <Star :score="4.7" :size="36" />
-            <span class="score">4.7</span>
+            <span class="score">{{shopInfo.foodScore}}</span>
           </div>
           <div class="delivery-wrapper">
             <span class="title">送达时间</span>
-            <span class="delivery">30 分钟</span>
+            <span class="delivery">{{shopInfo.deliveryTime}} 分钟</span>
           </div>
         </div>
       </div>
       <div class="split"></div>
       <div class="ratingselect">
         <div class="rating-type border-1px">
-<span class="block positive active">
-全部<span class="count">30</span>
-</span>
+          <span class="block positive active">
+            全部<span class="count">30</span>
+          </span>
           <span class="block positive">
-满意<span class="count">28</span>
-</span>
+            满意<span class="count">28</span>
+          </span>
           <span class="block negative">
-不满意<span class="count">2</span>
-</span>
+            不满意<span class="count">2</span>
+          </span>
         </div>
         <div class="switch on">
           <span class="iconfont icon-check_circle"></span>
@@ -44,43 +44,22 @@
       </div>
       <div class="rating-wrapper">
         <ul>
-          <li class="rating-item">
+          <li class="rating-item" v-for="(rating, index) in shopRatings" :key="index">
             <div class="avatar">
-              <img width="28" height="28"
-                   src="http://static.galileo.xiaojukeji.com/static/tms/default_header.png">
+              <img width="28" height="28" :src="rating.avatar">
             </div>
             <div class="content">
-              <h1 class="name">aa</h1>
+              <h1 class="name">{{rating.username}}</h1>
               <div class="star-wrapper">
-                <Star :score="5" :size="24" />
-                <span class="delivery">30</span>
+                <Star :score="rating.score" :size="24" />
+                <span class="delivery">{{rating.deliveryTime}}</span>
               </div>
-              <p class="text">不错</p>
+              <p class="text">{{rating.text}}</p>
               <div class="recommend">
-                <span class="iconfont icon-thumb_up"></span>
-                <span class="item">南瓜粥</span>
-                <span class="item">皮蛋瘦肉粥</span>
-                <span class="item">扁豆焖面</span>
+                <span class="iconfont" :class="rating.rateType === 0 ? 'icon-thumb_up' : 'icon-thumb_down'"></span>
+                <span class="item" v-for="(item, index) in rating.recommend" :key="index">{{item}}</span>
               </div>
-              <div class="time">2016-07-23 21:52:44</div>
-            </div>
-          </li>
-          <li class="rating-item">
-            <div class="avatar">
-              <img width="28" height="28"
-                   src="http://static.galileo.xiaojukeji.com/static/tms/default_header.png">
-            </div>
-            <div class="content">
-              <h1 class="name">aa</h1>
-              <div class="star-wrapper">
-                <Star :score="4" :size="24" />
-                <span class="delivery">30</span>
-              </div>
-              <p class="text">不错</p>
-              <div class="recommend">
-                <span class="iconfont icon-thumb_down"></span>
-              </div>
-              <div class="time">2016-07-23 21:52:44</div>
+              <div class="time">{{timeStampFormat(rating.rateTime)}}</div>
             </div>
           </li>
         </ul>
@@ -91,10 +70,39 @@
 
 <script>
 import Star from '../../../components/Star/Star'
+import {mapState} from 'vuex'
+import BScroll from 'better-scroll'
+import Moment from 'moment'
+
 export default {
   name: 'ShopRatings',
   components: {
     Star
+  },
+  mounted () {
+    // 获取商家评论
+    this.$store.dispatch('getShopRatings',
+      {
+        shopId: this.$route.params.id,
+        callback: () => {
+          this.$nextTick(() => {
+            // eslint-disable-next-line
+            new BScroll(this.$refs.ratings, {
+              click: true
+            })
+          })
+        }
+      })
+  },
+  computed: {
+    ...mapState(['shopRatings', 'shopInfo'])
+  },
+  methods: {
+    // 时间戳格式转换
+    timeStampFormat (timeStamp) {
+      const ts = Moment(timeStamp).format('YYYY-MM-DD HH:mm:ss')
+      return ts
+    }
   }
 }
 </script>
