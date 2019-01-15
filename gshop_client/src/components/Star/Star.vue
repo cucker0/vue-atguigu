@@ -14,7 +14,7 @@ export default {
 /*
 *  评分值星图组件
 * */
-  name: 'Start',
+  name: 'Star',
   props: {
     score: {
       type: Number,
