@@ -102,7 +102,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('getGoods') // 请求获取goods
+    this.$store.dispatch('getGoods', {foodId: this.$route.params.id}) // 请求获取goods
       .then(() => { // 数据更新后执行
         console.log('test dispatch ...')
         this.$nextTick(() => { // 列表数据更新显示后执行

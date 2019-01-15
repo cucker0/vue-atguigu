@@ -60,11 +60,11 @@ export default new Router({
       component: Login
     },
     {
-      path: '/shop',
+      path: '/shop/:id',
       component: Shop,
       children: [
         {
-          path: '/shop/goods',
+          path: 'goods',
           component: ShopGoods
         },
         {
@@ -77,7 +77,7 @@ export default new Router({
         },
         {
           path: '',
-          redirect: '/shop/goods'
+          redirect: 'goods'
         }
       ]
     },

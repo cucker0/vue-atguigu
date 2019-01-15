@@ -13,9 +13,10 @@
           <div class="desc">另需配送费￥{{shopInfo.deliveryPrice}}元</div>
         </div>
         <div class="content-right">
-          <RouterLink :to="{name: 'Pay'}" class="pay" :class="payClass">
+          <!-- 去结算 -->
+          <div class="pay" :class="payClass" @click="toPay">
             {{payText}}
-          </RouterLink>
+          </div>
         </div>
       </div>
       <transition name="move">
@@ -81,6 +82,14 @@ export default {
 
         }
       )
+    },
+    // 结算
+    toPay () {
+      const {totalPrice} = this
+      const {minPrice} = this.shopInfo
+      if (totalPrice >= minPrice) { // 总价是否达到起送价
+        this.$router.push('/pay')
+      }
     }
   },
   computed: {
