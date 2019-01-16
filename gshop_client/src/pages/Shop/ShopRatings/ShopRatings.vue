@@ -15,7 +15,7 @@
           </div>
           <div class="score-wrapper">
             <span class="title">商品评分</span>
-            <Star :score="4.7" :size="36" />
+            <Star :score="shopInfo.score" :size="36" />
             <span class="score">{{shopInfo.foodScore}}</span>
           </div>
           <div class="delivery-wrapper">
@@ -27,24 +27,24 @@
       <div class="split"></div>
       <div class="ratingselect">
         <div class="rating-type border-1px">
-          <span class="block positive active">
-            全部<span class="count">30</span>
+          <span class="block positive" :class="{active: ratingType === 2}" @click="selectRatingType(2)">
+            全部<span class="count">{{shopRatings.length}}</span>
           </span>
-          <span class="block positive">
-            满意<span class="count">28</span>
+          <span class="block positive" :class="{active: ratingType === 0}" @click="selectRatingType(0)">
+            满意<span class="count">{{positiveRatingsSize}}</span>
           </span>
-          <span class="block negative">
-            不满意<span class="count">2</span>
+          <span class="block negative" :class="{active: ratingType === 1}" @click="selectRatingType(1)">
+            不满意<span class="count" >{{shopRatings.length - positiveRatingsSize}}</span>
           </span>
         </div>
-        <div class="switch on">
+        <div class="switch" :class="{on: onlyShowRatingText}" @click="toggleOnlyShowRatingText">
           <span class="iconfont icon-check_circle"></span>
           <span class="text">只看有内容的评价</span>
         </div>
       </div>
       <div class="rating-wrapper">
         <ul>
-          <li class="rating-item" v-for="(rating, index) in shopRatings" :key="index">
+          <li class="rating-item" v-for="(rating, index) in filterShopRatings" :key="index">
             <div class="avatar">
               <img width="28" height="28" :src="rating.avatar">
             </div>
@@ -70,12 +70,18 @@
 
 <script>
 import Star from '../../../components/Star/Star'
-import {mapState} from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 import BScroll from 'better-scroll'
 import Moment from 'moment'
 
 export default {
   name: 'ShopRatings',
+  data () {
+    return {
+      ratingType: 2, // 选择评价类型。0:满意 1:不满意 2:全部
+      onlyShowRatingText: false // false:显示全部  true:只显示有评论的
+    }
+  },
   components: {
     Star
   },
@@ -95,13 +101,41 @@ export default {
       })
   },
   computed: {
-    ...mapState(['shopRatings', 'shopInfo'])
+    ...mapState(['shopRatings', 'shopInfo']),
+    ...mapGetters(['positiveRatingsSize']),
+    // 过滤评论产生新的数组
+    filterShopRatings () {
+      const {ratingType, onlyShowRatingText} = this
+      return this.shopRatings.filter((rating) => {
+        /*
+        * 条件1：
+        *  ratingType: 0/1/2
+        *  rating.rateType: 0/1
+        *  ratingType === 2 || rating.rateType === ratingType
+        *
+        *  且条件2：
+        *  onlyShowRatingText：true/false
+        *  rating.text: 有值/空值
+        *  (onlyShowRatingText && rating.text.length > 0) || !onlyShowRatingText  可把逻辑再简写成 !onlyShowRatingText || rating.text.length > 0
+        * */
+
+        return (ratingType === 2 || rating.rateType === ratingType) && (!onlyShowRatingText || rating.text.length > 0)
+      })
+    }
   },
   methods: {
     // 时间戳格式转换
     timeStampFormat (timeStamp) {
       const ts = Moment(timeStamp).format('YYYY-MM-DD HH:mm:ss')
       return ts
+    },
+    // 选择全部/满意/不满意的评论
+    selectRatingType (ratingType) {
+      this.ratingType = ratingType
+    },
+    // 只显示有评论内容切换开关
+    toggleOnlyShowRatingText () {
+      this.onlyShowRatingText = !this.onlyShowRatingText
     }
   }
 }
