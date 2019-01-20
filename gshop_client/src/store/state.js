@@ -12,5 +12,6 @@ export default {
   shopInfo: {}, // 商家信息
   goods: [], // 商品列表
   shopRatings: [], // 商家评价列表
-  cartFoods: [] // 选购车中的食物列表，并且food.count 大于0
+  cartFoods: [], // 选购车中的食物列表，并且food.count 大于0
+  searchShops: [] // 搜索得到的商家列表
 }
