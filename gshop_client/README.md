@@ -20,6 +20,29 @@ npm run build --report
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+## 效果图
+
+![avatar](./readme/images/19012101.png)
+
+![avatar](./readme/images/19012102.png)
+
+![avatar](./readme/images/19012103.png)
+
+![avatar](./readme/images/19012104.png)
+
+![avatar](./readme/images/19012105.png)
+
+![avatar](./readme/images/19012106.png)
+
+![avatar](./readme/images/19012107.png)
+
+![avatar](./readme/images/19012108.png)
+
+![avatar](./readme/images/19012109.png)
+
+![avatar](./readme/images/19012110.png)
+
+
 ## 其他
 this.$store.dispatch()传回调函数方法，是以数据的方法传递的
 ```
