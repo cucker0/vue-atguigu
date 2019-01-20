@@ -15,23 +15,11 @@
       <section class="section">
         <h3 class="section-title">活动与服务</h3>
         <div class="activity">
-          <div class="activity-item activity-green">
+          <div class="activity-item" :class="supportClass[support.type]" v-for="(support, index) in shopInfo.supports" :key="index">
             <span class="content-tag">
-              <span class="mini-tag">首单</span>
+              <span class="mini-tag">{{support.name}}</span>
             </span>
-            <span class="activity-content">新用户下单立减 17 元(不与其它活动同享)</span>
-          </div>
-          <div class="activity-item activity-red">
-            <span class="content-tag">
-              <span class="mini-tag">满减</span>
-            </span>
-            <span class="activity-content">满 35 减 19，满 65 减 35</span>
-          </div>
-          <div class="activity-item activity-orange">
-            <span class="content-tag">
-              <span class="mini-tag">特价</span>
-            </span>
-            <span class="activity-content">【立减 19.5 元】欢乐小食餐</span>
+            <span class="activity-content">{{support.content}}</span>
           </div>
         </div>
       </section>
@@ -39,18 +27,9 @@
       <section class="section">
         <h3 class="section-title">商家实景</h3>
         <div class="pic-wrapper">
-          <ul class="pic-list">
-            <li class="pic-item">
-              <img width="120" height="90"
-                   src="https://fuss10.elemecdn.com/f/7f/d1422ec824a0a9d1fb879c57ab533jpeg.jpeg"/>
-            </li>
-            <li class="pic-item">
-              <img width="120" height="90"
-                   src="https://fuss10.elemecdn.com/f/7f/d1422ec824a0a9d1fb879c57ab533jpeg.jpeg"/>
-            </li>
-            <li class="pic-item">
-              <img width="120" height="90"
-                   src="https://fuss10.elemecdn.com/f/7f/d1422ec824a0a9d1fb879c57ab533jpeg.jpeg"/>
+          <ul class="pic-list" ref="picsUL">
+            <li class="pic-item" v-for="(pic, index) in shopInfo.pics" :key="index">
+              <img width="120" height="90" :src="pic"/>
             </li>
           </ul>
         </div>
@@ -59,10 +38,10 @@
       <section class="section">
         <h3 class="section-title">商家信息</h3>
         <ul class="detail">
-          <li><span class="bold">品类</span> <span>包子粥店</span></li>
-          <li><span class="bold">商家电话</span> <span>13301083744</span></li>
-          <li><span class="bold">地址</span> <span>北京市丰台区</span></li>
-          <li><span class="bold">营业时间</span> <span>08:35-23:00</span></li>
+          <li><span class="bold">品类</span> <span>{{shopInfo.category}}</span></li>
+          <li><span class="bold">商家电话</span> <span>{{shopInfo.phone}}</span></li>
+          <li><span class="bold">地址</span> <span>{{shopInfo.address}}</span></li>
+          <li><span class="bold">营业时间</span> <span>{{shopInfo.workTime}}</span></li>
         </ul>
       </section>
     </div>
@@ -71,10 +50,39 @@
 
 <script>
 import {mapState} from 'vuex'
+import BScroll from 'better-scroll'
+
 export default {
   name: 'ShopInfo',
+  data () {
+    return {
+      supportClass: {'0': 'activity-green', '1': 'activity-red', '2': 'activity-orange'}
+    }
+  },
   computed: {
     ...mapState(['shopInfo']) // 读取商家信息
+  },
+  mounted () {
+    // eslint-disable-next-line
+    new BScroll('.shop-info', {
+      click: true
+    })
+    // this.setUlWidth()
+    // eslint-disable-next-line
+    new BScroll('.pic-wrapper', {
+      click: true,
+      scrollX: true
+    })
+  },
+  methods: {
+    setUlWidth () {
+      // 动态计算ul宽度
+      const ul = this.$refs.picsUL
+      const liWidth = 120
+      const space = 6
+      const count = this.shopInfo.pics.length
+      ul.style.width = (liWidth + space) * count - space + 'px' // 或者可以用样式让ul自动适应li宽度*/
+    }
   }
 }
 </script>
@@ -165,11 +173,14 @@ export default {
         margin-top 16px
         .pic-list
           font-size: 0
+          float:left // 让li撑开ul宽度
+          width:auto  // 让li撑开ul宽度
           .pic-item
             display: inline-block
             margin-right: 6px
-            width: 120px
+            width:120px
             height: 90px
+            white-space:nowrap // 文本不换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。
             &:last-child
               margin: 0
       .detail
