@@ -224,4 +224,19 @@ Vue.use(VueLazyload, {
   <img v-lazy="img.src" >
 ```
 
+* date-fns 轻量级的 JavaScript 日期库
+```
+# 网址
+https://date-fns.org/docs/Getting-Started
+
+# 安装
+Vue.filter('timeFormat', (value, formatStr = 'YYYY-MM-DD HH:mm:ss') => {
+  return moment(value).format(formatStr)
+})
+
+# 使用
+import format from 'date-fns/format'
+format(value, formatStr)
+
+```
 
