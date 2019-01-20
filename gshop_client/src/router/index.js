@@ -4,10 +4,25 @@
 
 import Vue from 'vue'
 import Router from 'vue-router'
-import MSite from '../pages/MSite/MSite'
+/*
+* 所有默认情况下所有组件的js会打包成一个js文件（以app开头命名的js文件），对于顶层入口的一些路由可能包含的组件比较多，这时候可以按路由路径拆分，给一些顶层路由设置
+* 路由组件悚加载，
+* */
+/*import MSite from '../pages/MSite/MSite'
 import Search from '../pages/Search/Search'
 import Order from '../pages/Order/Order'
-import Profile from '../pages/Profile/Profile'
+import Profile from '../pages/Profile/Profile'*/
+/*
+* 路由懒加载
+* */
+
+const MSite = () => import('../pages/MSite/MSite') // MSite为一个函数对象，只有执行此函数才会加载该路由组件，这个函数在第一次请求对应的路由路径时才会执行
+const Search = () => {
+  return import('../pages/Search/Search')
+}
+const Order = () => import('../pages/Order/Order')
+const Profile = () => import('../pages/Profile/Profile')
+
 import Login from '../components/Login/Login'
 import Shop from '../pages/Shop/Shop'
 import ShopGoods from '../pages/Shop/ShopGoods/ShopGoods'

@@ -12,8 +12,11 @@
         <router-link :to="`/shop/${$route.params.id}/info`">商家</router-link>
       </div>
 
-    </div>
-    <router-view></router-view>
+    </div>组件路由组件对象
+    <!--  -->
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
