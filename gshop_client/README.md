@@ -25,11 +25,35 @@ this.$store.dispatch()传回调函数方法，是以数据的方法传递的
 ```
 举例：
 组件中使用下面这处方式给action传回调函数
-this.$store.dispatch('xxAction', {data, callback: () => {}})
-this.$store.dispatch('xxAction', {data, callback: () => {
-    this.$nextTick(() => {
-    })}
-})
+  mounted () {
+    // 获取商家评论
+    this.$store.dispatch('getShopRatings',
+      {
+        shopId: this.$route.params.id,
+        callback: () => {
+          this.$nextTick(() => {
+            // eslint-disable-next-line
+            new BScroll(this.$refs.ratings, {
+              click: true
+            })
+          })
+        }
+      })
+  }
+
+action后端
+  // 异步获取商家评价列表
+  async getShopRatings ({commit}, {shopId, callback}) {
+    // commit
+    // {}:要传的数据，这里可以包含函数
+    const result = await reqShopRatings(shopId)
+    if (result.code === 0) {
+      const shopRatings = result.data
+      commit(RECEIVE_SHOP_RATINGS, {shopRatings})
+      // 数据更新了，通知一下组件
+      callback && callback()
+    }
+  }
 
 #
 
@@ -78,3 +102,103 @@ new BScroll('.xx-class', {
 })
 
 ```
+
+* mock模拟数据组件
+```
+# 网址
+http://mockjs.com/
+https://github.com/nuysoft/Mock/wiki/Getting-Started
+
+# 安装
+npm install mockjs --save
+
+# 使用
+1.创建mockServer.js 文件，内容如下：
+import Mock from 'mockjs'
+import data from './data'
+
+// 返回goods列表接口
+Mock.mock(/\/goods\/\d{1,}/, {code: 0, data: data.goods})
+
+// 返回ratings列表接口
+Mock.mock(/\/shop_ratings\/\d{1,}/, {code: 0, data: data.ratings})
+
+// 返回good Info列表接口
+Mock.mock(/\/shop_info\/\d{1,}/, {code: 0, data: data.info})
+
+// 这里不需向export任务方法、变量、对象等。所以不需要写export default xxx
+
+2.main.js文件中引入mock
+import './mock/mockServer' // 引入mockServer
+
+
+```
+
+* mint-ui 移动端ui组件
+```
+# 网址
+http://mint-ui.github.io/#!/zh-cn
+
+# 安装
+npm i mint-ui -S
+
+# 使用
+1、完整引用
+main.js中引入
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+
+Vue.use(MintUI)
+
+2、按需引入
+
+2.1、.babelrc 文件plugins加入配置项
+
+{
+  "presets": [
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+      }
+    }],
+    "stage-2"
+  ],
+  "plugins": ["transform-vue-jsx", "transform-runtime", ["component", [
+    {
+      "libraryName": "mint-ui",
+      "style": true
+    }
+  ]] ]
+}
+
+2.2、在需要使用的组件中引入
+import { MessageBox, Toast } from 'mint-ui'
+
+```
+
+* vue-lazyload 图片懒加载
+```
+# 网址
+https://github.com/hilongjw/vue-lazyload
+
+# 安装
+npm install vue-lazyload -S
+
+# 使用
+main.js文件中引入vue-lazyload
+
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload, {
+  preLoad: 1.3, // 预加载调度比例
+  error: 'dist/error.png', // 加载出错显示的图片
+  loading: 'dist/loading.gif', // 加载中显示的图片
+  attempt: 1 // 尝试次数
+})
+
+
+组件中
+  <img v-lazy="img.src" >
+```
+
+

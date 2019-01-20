@@ -2,6 +2,8 @@
 * 路由器对象
 * */
 
+/* eslint-disable */
+
 import Vue from 'vue'
 import Router from 'vue-router'
 /*
@@ -22,7 +24,6 @@ const Search = () => {
 }
 const Order = () => import('../pages/Order/Order')
 const Profile = () => import('../pages/Profile/Profile')
-
 import Login from '../components/Login/Login'
 import Shop from '../pages/Shop/Shop'
 import ShopGoods from '../pages/Shop/ShopGoods/ShopGoods'

@@ -3,10 +3,11 @@
     <ShopHeader></ShopHeader>
     <div class="tab">
       <div class="tab-item">
-        <router-link :to="`/shop/${$route.params.id}/goods`">点餐</router-link>
+        <!-- route使用replace模式，不是默认的push模式 -->
+        <router-link :to="`/shop/${$route.params.id}/goods`" replace>点餐</router-link>
       </div>
       <div class="tab-item">
-        <router-link :to="`/shop/${$route.params.id}/ratings`">评价</router-link>
+        <router-link :to="`/shop/${$route.params.id}/ratings`" replace>评价</router-link>
       </div>
       <div class="tab-item">
         <router-link :to="`/shop/${$route.params.id}/info`">商家</router-link>

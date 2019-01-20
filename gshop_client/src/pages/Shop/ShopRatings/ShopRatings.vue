@@ -59,7 +59,9 @@
                 <span class="iconfont" :class="rating.rateType === 0 ? 'icon-thumb_up' : 'icon-thumb_down'"></span>
                 <span class="item" v-for="(item, index) in rating.recommend" :key="index">{{item}}</span>
               </div>
-              <div class="time">{{timeStampFormat(rating.rateTime)}}</div>
+              <!--<div class="time">{{timeStampFormat(rating.rateTime)}}</div>-->
+              <!-- 使用过滤器方法 -->
+              <div class="time">{{rating.rateTime |timeFormat}}</div>
             </div>
           </li>
         </ul>
