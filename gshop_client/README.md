@@ -20,6 +20,14 @@ npm run build --report
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+## 运行要求
+* API接口服务器使用 gshop-server_final（作为API服务器端）
+```
+# 地址
+https://github.com/cucker0/gshop-server_final
+
+```
+
 ## 效果图
 
 ![avatar](./readme/images/19012101.png)
