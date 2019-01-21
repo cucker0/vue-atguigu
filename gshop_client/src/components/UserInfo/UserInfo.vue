@@ -1,5 +1,5 @@
 <template>
-	<div class="user-center">
+  <div class="user-center">
     <HeaderTop title="用户信息">
       <nav class="back-nav" slot="left">
         <a class="back" @click="$router.replace('/msite')">

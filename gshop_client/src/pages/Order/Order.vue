@@ -97,6 +97,4 @@ export default {
     .order_list
       padding-top 50px
       width 100%
-
-
 </style>
