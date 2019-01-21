@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <RouterView/>
+    <keep-alive>
+      <RouterView/>
+    </keep-alive>
+
     <FooterGuide v-if="$route.meta.showFooter"/> <!-- 根据当前路由$route.meta里定义的showFooter值来判断是否显示 -->
   </div>
 </template>

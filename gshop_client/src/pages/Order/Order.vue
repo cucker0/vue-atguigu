@@ -1,20 +1,30 @@
 <template>
-  <section class="order">
+  <div class="order">
     <HeaderTop title="订单列表"></HeaderTop>
-    <section class="order_no_login">
+    <div class="order_no_login" v-if="!userinfo._id">
       <img src="./images/order/person.png">
       <h3>登录后查看外卖订单</h3>
-      <button>立即登陆</button>
-    </section>
-  </section>
+      <router-link to="/login" tag="button">立即登陆</router-link>
+    </div>
+    <div class="order_list" v-else>
+      <ShopCart bottomSize="60"/>
+    </div>
+  </div>
 </template>
 
 <script>
 import HeaderTop from '../../components/HeaderTop/HeaderTop'
+import ShopCart from '../../components/ShopCart/ShopCart'
+import {mapState} from 'vuex'
+
 export default {
   name: 'Order',
   components: {
-    HeaderTop
+    HeaderTop,
+    ShopCart
+  },
+  computed: {
+    ...mapState(['userinfo'])
   }
 }
 </script>
@@ -84,4 +94,9 @@ export default {
         outline none
         border-radius 5px
         padding 10px 20px
+    .order_list
+      padding-top 50px
+      width 100%
+
+
 </style>

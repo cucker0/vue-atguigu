@@ -1,7 +1,7 @@
 <template>
   <div class="pay">
     <HeaderTop title="结帐">
-      <nav class="pay-nav" slot="left">
+      <nav class="back-nav" slot="left">
         <a class="back" @click="$router.replace('/msite')">
           <i class="iconfont icon-arrow_left"></i>
         </a>
@@ -24,8 +24,8 @@ export default {
 
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixins.styl"
-  .pay //我的
-    width 100%
+  .back-nav //我的
+    margin 0
     overflow hidden
     .back
       position: absolute

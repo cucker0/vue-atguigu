@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="shopcart">
+    <div class="shopcart" :style="'bottom:' + bottomSize + 'px'">
       <div class="content">
         <div class="content-left" @click="toggleShow">
           <div class="logo-wrapper">
@@ -59,6 +59,12 @@ export default {
   data () {
     return {
       isShow: false // 购物清单显示状态
+    }
+  },
+  props: {
+    bottomSize: { // flex buttom 像素值
+      type: Number,
+      default: 0
     }
   },
   components: {
@@ -172,7 +178,7 @@ export default {
   .shopcart
     position fixed
     left 0
-    bottom 0
+    /*bottom 0*/
     z-index 50
     width 100%
     height 48px

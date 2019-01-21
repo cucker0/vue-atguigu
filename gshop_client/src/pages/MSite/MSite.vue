@@ -1,7 +1,7 @@
 <template>
   <div class="msite">
     <HeaderTop :title="address.name">
-      <router-link class="header_search" slot="left" to="'/search">
+      <router-link class="header_search" slot="left" to="/search">
         <i class="iconfont icon-sousuo"></i>
       </router-link>
 

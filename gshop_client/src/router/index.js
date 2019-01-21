@@ -30,6 +30,7 @@ import ShopGoods from '../pages/Shop/ShopGoods/ShopGoods'
 import ShopRatings from '../pages/Shop/ShopRatings/ShopRatings'
 import ShopInfo from '../pages/Shop/ShopInfo/ShopInfo'
 import Pay from '../components/Pay/Pay'
+import UserInfo from '../components/UserInfo/UserInfo'
 
 // 声明使用vue-router插件
 Vue.use(Router)
@@ -101,6 +102,10 @@ export default new Router({
       path: '/pay',
       name: 'Pay',
       component: Pay
+    },
+    {
+      path: '/userinfo',
+      component: UserInfo
     }
   ]
 })
