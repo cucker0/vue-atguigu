@@ -8,6 +8,10 @@ https://github.com/DMQ/mvvm
 
 ![avatar](mvvm工作原理示意图.png)
 
+![avatar](MVVM.png)
+
+![avatar](./images/mvvm.png)
+
 ## 说明
 ```
 Dep
@@ -41,4 +45,3 @@ Dep与Watcher的关系
         初始化的解析模块中的表达式创建watcher对象时
 
 ```
-

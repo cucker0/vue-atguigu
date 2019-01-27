@@ -28,7 +28,7 @@
     },
     mounted () {
       PubSub.subscribe('search', (msg, search_key)=>{
-        const url = "https://api.github.com/search/users?q=aa"
+        const url = `https://api.github.com/search/users?q=${search_key}`
         //更新状态
         this.error_msg = ''
         this.users = null
