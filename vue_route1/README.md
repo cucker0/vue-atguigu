@@ -19,3 +19,11 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## 效果
+
+![avatar](./images/vue_router1.png)
+
+![avatar](./images/vue_router1_2.png)
+
+![avatar](./images/vue_router1_3.png)
