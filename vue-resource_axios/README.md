@@ -22,4 +22,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 # 效果
 
-![avatar](./images/axios.png")
+![avatar](./images/vue-resource_axios1.png")
+
+![avatar](./images/vue-resource_axios2.png")

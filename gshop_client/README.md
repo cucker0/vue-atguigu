@@ -30,6 +30,8 @@ https://github.com/cucker0/gshop-server_final
 
 ## 效果图
 
+![avatar](./readme/images/vuex工作原理.png)
+
 ![avatar](./readme/images/19012101.png)
 
 ![avatar](./readme/images/19012102.png)
@@ -50,6 +52,7 @@ https://github.com/cucker0/gshop-server_final
 
 ![avatar](./readme/images/19012110.png)
 
+![avatar](./readme/images/19012110.png)
 
 ## 其他
 this.$store.dispatch()传回调函数方法，是以数据的方法传递的

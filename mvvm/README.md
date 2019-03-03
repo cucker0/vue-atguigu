@@ -12,6 +12,13 @@ https://github.com/DMQ/mvvm
 
 ![avatar](./images/mvvm.png)
 
+![avatar](./images/mvvm1.png)
+
+![avatar](./images/mvvm2.png)
+
+![avatar](./images/mvvm3.png)
+
+
 ## 说明
 ```
 Dep
